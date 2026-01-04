@@ -1,0 +1,124 @@
+import Image from "next/image";
+import { useState, useEffect } from "react";
+import { ArrowRight } from "lucide-react";
+import GlassSocialIcons from "../ui/GlassSocialIcons";
+import TextType from "../ui/TextType";
+
+export default function HeroSection() {
+  const [mounted, setMounted] = useState(false);
+  const [currentRole, setCurrentRole] = useState(0);
+  const roles = [
+    "Student",
+    "Aspiring Software Developer",
+    "Web Developer",
+    "Mobile App Developer",
+    "Problem-Solver",
+  ];
+
+  useEffect(() => {
+    setMounted(true);
+    const interval = setInterval(() => {
+      setCurrentRole((prev) => (prev + 1) % roles.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    element?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  return (
+    <>
+      <div className="relative z-10 flex min-h-screen items-center pt-16">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div
+              className={`space-y-8 transition-all duration-1000 ${
+                mounted
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-10"
+              }`}
+            >
+              <GlassSocialIcons />
+
+              <div>
+                <p className="text-white/80 text-2xl mb-2 font-light">
+                  Hello, I'm
+                </p>
+                <h1 className="text-white text-5xl lg:text-7xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-green-400">
+                  Liam Christian
+                </h1>
+                <div className="h-1 w-full max-w-xl bg-gradient-to-r from-green-400 via-green-500 to-transparent rounded-full" />
+              </div>
+
+              <div className="h-8">
+                <p className="text-white text-xl font-semibold">
+                  <span className="text-green-400">► </span>{" "}
+                  <span
+                    key={currentRole}
+                    className="inline-block animate-fade-in"
+                  >
+                    <TextType
+                      as="span"
+                      text={roles[currentRole]}
+                      typingSpeed={100}
+                      pauseDuration={3000}
+                      showCursor={true}
+                      cursorCharacter="|"
+                    />
+                  </span>
+                </p>
+              </div>
+
+              <p className="text-white/90 text-lg max-w-xl leading-relaxed">
+                Building innovative web and mobile applications with passion and
+                precision. Dedicated to making a meaningful impact in the IT
+                industry through cutting-edge solutions and continuous learning.
+              </p>
+
+              <div className="flex gap-4 flex-wrap">
+                <button
+                  onClick={() => scrollToSection("projects")}
+                  className="group flex items-center gap-3 px-6 py-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 rounded-2xl transition-all duration-300 border-2 border-green-500 hover:scale-105 hover:shadow-lg hover:shadow-green-500/50"
+                >
+                  <span className="font-semibold text-white">
+                    View Projects
+                  </span>
+                  <ArrowRight className="w-5 h-5 text-white group-hover:translate-x-1 transition-transform" />
+                </button>
+                <button
+                  onClick={() => scrollToSection("contact")}
+                  // className="relative border-2 border-white/30 text-white px-8 py-4 rounded-xl font-bold backdrop-blur-sm bg-white/5 hover:bg-white/10 hover:border-white/50 transition-all hover:scale-105"
+                  className="relative  text-white px-8 py-4 rounded-xl font-bold backdrop-blur-sm hover:bg-white/10 hover:border-white/50 transition-all hover:scale-105"
+                >
+                  Get in Touch
+                </button>
+              </div>
+            </div>
+
+            <div className="hidden lg:block"></div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        className={`absolute right-0 top-0 bottom-0 z-[5] hidden lg:flex items-center transition-all duration-1000 ${
+          mounted ? "opacity-100 translate-x-0" : "opacity-0 translate-x-10"
+        }`}
+      >
+        <div className="relative">
+          <div className="absolute inset-0 bg-gradient-to-l from-transparent via-green-400/20 to-transparent blur-3xl" />
+          <Image
+            src="/Liam.png"
+            alt="Liam"
+            width={1075}
+            height={1075}
+            className="object-contain h-screen w-auto relative z-10"
+            priority
+          />
+        </div>
+      </div>
+    </>
+  );
+}

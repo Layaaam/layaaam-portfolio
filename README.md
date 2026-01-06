@@ -19,12 +19,6 @@ I'm **Liam Christian B. Papasin**, a BS Information Technology student specializ
 - **Tailwind CSS** - Utility-first CSS framework
 - **Vercel** - Deployment platform
 
-##  Deployment
-
-This portfolio is deployed on Vercel with automatic deployments from the main branch.
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Layaaam/layaaam-portfolio)
-
 ## 🤝 Connect
 
 Feel free to reach out for collaborations, opportunities, or just to connect!

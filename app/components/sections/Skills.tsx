@@ -1,77 +1,44 @@
 import React, { useState, useEffect } from "react";
-import { Code, Database, Layout, Smartphone } from "lucide-react";
 
-const technologies = [
-  { name: "Python", icon: "python", color: "#3776AB" },
-  { name: "Java", icon: "openjdk", color: "#007396" },
-  { name: "JavaScript", icon: "javascript", color: "#F7DF1E" },
-  { name: "PHP", icon: "php", color: "#777BB4" },
-  { name: "Dart", icon: "dart", color: "#0175C2" },
-  { name: "Flutter", icon: "flutter", color: "#02569B" },
-  { name: "Laravel", icon: "laravel", color: "#FF2D20" },
-  { name: "React", icon: "react", color: "#61DAFB" },
-  { name: "Vue.js", icon: "vuedotjs", color: "#4FC08D" },
-  { name: "Next.js", icon: "nextdotjs", color: "#FFFFFF" },
-  { name: "MySQL", icon: "mysql", color: "#4479A1" },
-  { name: "SQLite", icon: "sqlite", color: "#003B57" },
-  { name: "PostgreSQL", icon: "postgresql", color: "#4169E1" },
-  { name: "Firebase", icon: "firebase", color: "#FFCA28" },
-  { name: "Supabase", icon: "supabase", color: "#3ECF8E" },
-  { name: "VS Code", icon: "visualstudiocode", color: "#007ACC" },
-  { name: "Android Studio", icon: "androidstudio", color: "#3DDC84" },
-  { name: "Git", icon: "git", color: "#F05032" },
-  { name: "GitHub", icon: "github", color: "#FFFFFF" },
-];
+const techCategories = {
+  "Programming Languages": [
+    { name: "Python", icon: "python", color: "#3776AB" },
+    { name: "Java", icon: "java", color: "#007396" },
+    { name: "JavaScript", icon: "javascript", color: "#F7DF1E" },
+    { name: "PHP", icon: "php", color: "#777BB4" },
+    { name: "Dart", icon: "dart", color: "#0175C2" },
+    { name: "SQL", icon: "mysql", color: "#4479A1" },
+  ],
 
-const skillCategories = [
-  {
-    title: "Frontend Development",
-    icon: <Layout className="w-6 h-6" />,
-    skills: [
-      { name: "React & Next.js", level: 85 },
-      { name: "Vue.js", level: 75 },
-      { name: "HTML/CSS", level: 90 },
-      { name: "Tailwind CSS", level: 95 },
-      { name: "TypeScript", level: 80 },
-    ],
-  },
-  {
-    title: "Backend Development",
-    icon: <Database className="w-6 h-6" />,
-    skills: [
-      { name: "Laravel/PHP", level: 80 },
-      { name: "Node.js", level: 70 },
-      { name: "PostgreSQL", level: 75 },
-      { name: "MySQL", level: 80 },
-      { name: "Firebase", level: 85 },
-    ],
-  },
-  {
-    title: "Mobile Development",
-    icon: <Smartphone className="w-6 h-6" />,
-    skills: [
-      { name: "Flutter", level: 80 },
-      { name: "Dart", level: 80 },
-      { name: "React Native", level: 65 },
-      { name: "Android (Java)", level: 70 },
-    ],
-  },
-  {
-    title: "Programming Languages",
-    icon: <Code className="w-6 h-6" />,
-    skills: [
-      { name: "JavaScript/TypeScript", level: 85 },
-      { name: "Python", level: 75 },
-      { name: "Java", level: 70 },
-      { name: "PHP", level: 80 },
-      { name: "Dart", level: 80 },
-    ],
-  },
-];
+  "Frameworks & Libraries": [
+    { name: "Flutter", icon: "flutter", color: "#02569B" },
+    { name: "Laravel", icon: "laravel", color: "#FF2D20" },
+    { name: "React", icon: "react", color: "#61DAFB" },
+    { name: "Vue.js", icon: "vuedotjs", color: "#4FC08D" },
+    { name: "Next.js", icon: "nextdotjs", color: "#FFFFFF" },
+    { name: "Node.js", icon: "nodedotjs", color: "#339933" },
+  ],
+
+  "Databases & Backend Services": [
+    { name: "MySQL", icon: "mysql", color: "#4479A1" },
+    { name: "PostgreSQL", icon: "postgresql", color: "#4169E1" },
+    { name: "SQLite", icon: "sqlite", color: "#003B57" },
+    { name: "Firebase", icon: "firebase", color: "#FFCA28" },
+    { name: "Supabase", icon: "supabase", color: "#3ECF8E" },
+  ],
+
+  "Tools & Development Environment": [
+    { name: "Visual Studio Code", icon: "vscode", color: "#007ACC" },
+    { name: "Android Studio", icon: "androidstudio", color: "#3DDC84" },
+    { name: "Git", icon: "git", color: "#F05032" },
+    { name: "GitHub", icon: "github", color: "#FFFFFF" },
+    { name: "Figma", icon: "figma", color: "#F24E1E" },
+    { name: "Adobe Photoshop", icon: "photoshop", color: "#31A8FF" },
+  ],
+};
 
 export default function Skills() {
   const [isVisible, setIsVisible] = useState(false);
-  const [activeCategory, setActiveCategory] = useState(0);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -94,174 +61,100 @@ export default function Skills() {
   return (
     <section
       id="skills"
-      className="relative min-h-screen py-24 bg-gradient-to-b from-black/60 to-black/80"
+      className="relative min-h-screen py-20 bg-gradient-to-b from-black/60 to-black/80"
     >
       <div className="container mx-auto px-6 lg:px-12 relative z-10">
         <div
-          className={`mb-20 text-center transition-all duration-1000 ${
+          className={`mb-16 text-center transition-all duration-1000 ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
           }`}
         >
           <h2 className="text-white text-5xl lg:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-green-400">
-            Skills & Expertise
+            Skills & Technologies
           </h2>
           <div className="h-1 w-32 bg-gradient-to-r from-green-400 to-transparent mx-auto rounded-full mb-6" />
           <p className="text-white/70 text-xl max-w-2xl mx-auto">
-            Proficient in modern technologies and frameworks
+            Tools and technologies I've learned and experienced throughout my
+            journey.
           </p>
         </div>
 
         <div className="max-w-7xl mx-auto">
-          <div
-            className={`flex flex-wrap justify-center gap-4 mb-16 transition-all duration-1000 delay-200 ${
-              isVisible
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-10"
-            }`}
-          >
-            {skillCategories.map((category, index) => (
-              <button
-                key={index}
-                onClick={() => setActiveCategory(index)}
-                className={`flex items-center gap-3 px-6 py-4 rounded-xl font-semibold transition-all duration-300 ${
-                  activeCategory === index
-                    ? "bg-gradient-to-r from-green-400 to-green-500 text-black shadow-lg shadow-green-500/50 scale-105"
-                    : "bg-white/5 text-white/80 border border-white/10 hover:bg-white/10 hover:border-green-400/30"
-                }`}
-              >
-                {category.icon}
-                <span>{category.title}</span>
-              </button>
-            ))}
-          </div>
-
-          <div
-            className={`grid md:grid-cols-2 gap-8 mb-20 transition-all duration-1000 delay-300 ${
-              isVisible
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-10"
-            }`}
-          >
-            {skillCategories[activeCategory].skills.map((skill, index) => (
+          {Object.entries(techCategories).map(
+            ([category, techs], categoryIndex) => (
               <div
-                key={index}
-                className="group bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:border-green-400/30 transition-all duration-300"
-                style={{ animationDelay: `${index * 100}ms` }}
+                key={category}
+                className={`mb-16 transition-all duration-1000 ${
+                  isVisible
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-10"
+                }`}
+                style={{ transitionDelay: `${categoryIndex * 100}ms` }}
               >
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-white font-bold text-lg">{skill.name}</h3>
-                  <span className="text-green-400 font-bold text-sm px-3 py-1 bg-green-400/10 rounded-full">
-                    {skill.level}%
-                  </span>
+                <div className="flex items-center gap-4 mb-8">
+                  <h3 className="text-2xl lg:text-3xl font-bold text-white/90">
+                    {category}
+                  </h3>
+                  <div className="flex-1 h-px bg-gradient-to-r from-green-400/50 to-transparent" />
                 </div>
-                <div className="relative h-3 bg-white/10 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-gradient-to-r from-green-400 to-green-600 rounded-full transition-all duration-1000 ease-out relative"
-                    style={{
-                      width: isVisible ? `${skill.level}%` : "0%",
-                      transitionDelay: `${index * 150}ms`,
-                    }}
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer" />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
 
-          <div
-            className={`relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-800/30 to-gray-900/30 backdrop-blur-sm border border-white/10 p-8 transition-all duration-1000 delay-500 ${
-              isVisible
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-10"
-            }`}
-          >
-            <h3 className="text-white text-2xl font-bold mb-6 text-center">
-              Technologies & Tools
-            </h3>
-            <div className="flex gap-6 overflow-hidden">
-              <div className="flex gap-6 animate-marquee">
-                {technologies.map((tech, index) => (
-                  <div
-                    key={`first-${index}`}
-                    className="flex-shrink-0 group flex items-center gap-3 px-6 py-4 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl hover:bg-white/10 hover:scale-105 transition-all"
-                  >
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+                  {techs.map((tech, index) => (
                     <div
-                      className="w-8 h-8 flex-shrink-0"
+                      key={index}
+                      className="group relative bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:border-green-400/50 hover:shadow-lg hover:shadow-green-400/20 transition-all duration-300 hover:-translate-y-2"
                       style={{
-                        backgroundColor: tech.color,
-                        WebkitMaskImage: `url(https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/${tech.icon}.svg)`,
-                        WebkitMaskRepeat: "no-repeat",
-                        WebkitMaskPosition: "center",
-                        WebkitMaskSize: "contain",
-                        maskImage: `url(https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/${tech.icon}.svg)`,
-                        maskRepeat: "no-repeat",
-                        maskPosition: "center",
-                        maskSize: "contain",
+                        animationDelay: `${categoryIndex * 100 + index * 50}ms`,
                       }}
-                    />
-                    <span className="text-white font-semibold whitespace-nowrap">
-                      {tech.name}
-                    </span>
-                  </div>
-                ))}
+                    >
+                      <div className="flex flex-col items-center justify-center space-y-4">
+                        <div className="relative w-16 h-16 flex items-center justify-center rounded-xl bg-white/5 group-hover:bg-white/10 transition-all duration-300">
+                          <img
+                            src={`https://cdn.simpleicons.org/${tech.icon}`}
+                            alt={tech.name}
+                            className="w-10 h-10 transition-all duration-300 group-hover:scale-110"
+                            style={{ filter: "brightness(0) invert(1)" }}
+                            onError={(e) => {
+                              e.currentTarget.style.filter = "none";
+                            }}
+                          />
+                          <div
+                            className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-20 transition-opacity duration-300"
+                            style={{ backgroundColor: tech.color }}
+                          />
+                        </div>
+
+                        <div className="text-center">
+                          <h4 className="text-white font-semibold text-sm group-hover:text-green-400 transition-colors duration-300">
+                            {tech.name}
+                          </h4>
+                        </div>
+                      </div>
+
+                      <div
+                        className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                        style={{
+                          background: `radial-gradient(circle at center, ${tech.color}15 0%, transparent 70%)`,
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
-              <div className="flex gap-6 animate-marquee" aria-hidden="true">
-                {technologies.map((tech, index) => (
-                  <div
-                    key={`second-${index}`}
-                    className="flex-shrink-0 group flex items-center gap-3 px-6 py-4 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl hover:bg-white/10 hover:scale-105 transition-all"
-                  >
-                    <div
-                      className="w-8 h-8 flex-shrink-0"
-                      style={{
-                        backgroundColor: tech.color,
-                        WebkitMaskImage: `url(https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/${tech.icon}.svg)`,
-                        WebkitMaskRepeat: "no-repeat",
-                        WebkitMaskPosition: "center",
-                        WebkitMaskSize: "contain",
-                        maskImage: `url(https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/${tech.icon}.svg)`,
-                        maskRepeat: "no-repeat",
-                        maskPosition: "center",
-                        maskSize: "contain",
-                      }}
-                    />
-                    <span className="text-white font-semibold whitespace-nowrap">
-                      {tech.name}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+            )
+          )}
         </div>
       </div>
 
       <style jsx>{`
-        @keyframes shimmer {
-          0% {
-            transform: translateX(-100%);
-          }
+        @keyframes float {
+          0%,
           100% {
-            transform: translateX(100%);
+            transform: translateY(0px);
           }
-        }
-        @keyframes marquee {
-          0% {
-            transform: translateX(0);
+          50% {
+            transform: translateY(-10px);
           }
-          100% {
-            transform: translateX(-100%);
-          }
-        }
-        .animate-shimmer {
-          animation: shimmer 2s infinite;
-        }
-        .animate-marquee {
-          animation: marquee 40s linear infinite;
-        }
-        .animate-marquee:hover {
-          animation-play-state: paused;
         }
       `}</style>
     </section>

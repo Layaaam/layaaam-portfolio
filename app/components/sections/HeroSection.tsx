@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { ArrowRight } from "lucide-react";
 import GlassSocialIcons from "../ui/GlassSocialIcons";
 import TextType from "../ui/TextType";
+import Button from "../ui/Button";
 
 export default function HeroSection() {
   const [mounted, setMounted] = useState(false);
@@ -80,22 +81,19 @@ export default function HeroSection() {
               </p>
 
               <div className="flex gap-4 flex-wrap">
-                <button
+                <Button
+                  variant="primary"
                   onClick={() => scrollToSection("projects")}
-                  className="group flex items-center gap-3 px-6 py-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 rounded-2xl transition-all duration-300 border-2 border-green-500 hover:scale-105 hover:shadow-lg hover:shadow-green-500/50"
+                  icon={<ArrowRight className="w-5 h-5" />}
                 >
-                  <span className="font-semibold text-white">
-                    View Projects
-                  </span>
-                  <ArrowRight className="w-5 h-5 text-white group-hover:translate-x-1 transition-transform" />
-                </button>
-                <button
+                  View Projects
+                </Button>
+                <Button
+                  variant="secondary"
                   onClick={() => scrollToSection("contact")}
-                  // className="relative border-2 border-white/30 text-white px-8 py-4 rounded-xl font-bold backdrop-blur-sm bg-white/5 hover:bg-white/10 hover:border-white/50 transition-all hover:scale-105"
-                  className="relative  text-white px-8 py-4 rounded-xl font-bold backdrop-blur-sm hover:bg-white/10 hover:border-white/50 transition-all hover:scale-105"
                 >
                   Get in Touch
-                </button>
+                </Button>
               </div>
             </div>
 

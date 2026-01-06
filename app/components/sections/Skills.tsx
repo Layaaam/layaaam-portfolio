@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 const techCategories = {
   "Programming Languages": [
     { name: "Python", icon: "python", color: "#3776AB" },
-    { name: "Java", icon: "java", color: "#007396" },
+    { name: "Java", icon: "openjdk", color: "#007396" },
     { name: "JavaScript", icon: "javascript", color: "#F7DF1E" },
     { name: "PHP", icon: "php", color: "#777BB4" },
     { name: "Dart", icon: "dart", color: "#0175C2" },
@@ -28,12 +28,12 @@ const techCategories = {
   ],
 
   "Tools & Development Environment": [
-    { name: "Visual Studio Code", icon: "vscode", color: "#007ACC" },
+    { name: "Visual Studio Code", icon: "visualstudiocode", color: "#007ACC" },
     { name: "Android Studio", icon: "androidstudio", color: "#3DDC84" },
     { name: "Git", icon: "git", color: "#F05032" },
     { name: "GitHub", icon: "github", color: "#FFFFFF" },
     { name: "Figma", icon: "figma", color: "#F24E1E" },
-    { name: "Adobe Photoshop", icon: "photoshop", color: "#31A8FF" },
+    { name: "Adobe Photoshop", icon: "adobephotoshop", color: "#31A8FF" },
   ],
 };
 
@@ -109,13 +109,18 @@ export default function Skills() {
                     >
                       <div className="flex flex-col items-center justify-center space-y-4">
                         <div className="relative w-16 h-16 flex items-center justify-center rounded-xl bg-white/5 group-hover:bg-white/10 transition-all duration-300">
-                          <img
-                            src={`https://cdn.simpleicons.org/${tech.icon}`}
-                            alt={tech.name}
+                          <div
                             className="w-10 h-10 transition-all duration-300 group-hover:scale-110"
-                            style={{ filter: "brightness(0) invert(1)" }}
-                            onError={(e) => {
-                              e.currentTarget.style.filter = "none";
+                            style={{
+                              backgroundColor: "white",
+                              WebkitMaskImage: `url(https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/${tech.icon}.svg)`,
+                              WebkitMaskRepeat: "no-repeat",
+                              WebkitMaskPosition: "center",
+                              WebkitMaskSize: "contain",
+                              maskImage: `url(https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/${tech.icon}.svg)`,
+                              maskRepeat: "no-repeat",
+                              maskPosition: "center",
+                              maskSize: "contain",
                             }}
                           />
                           <div

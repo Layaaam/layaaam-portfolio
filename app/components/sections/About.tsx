@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ArrowRight, Download } from "lucide-react";
 import Image from "next/image";
+import Button from "../ui/Button";
 
 const technologies = [
   { name: "Python", icon: "python", color: "#3776AB" },
@@ -96,10 +97,10 @@ export default function About() {
               </p>
               <br />
               <p className="text-white/90 leading-relaxed text-lg">
-                I’m committed to learning and growing every single day, striving
+                I'm committed to learning and growing every single day, striving
                 to create reliable, practical solutions that tackle real
                 problems and deliver meaningful impact. I may still be on the
-                journey, but I’m dedicated to getting better with every project
+                journey, but I'm dedicated to getting better with every project
                 and reaching my full potential.
               </p>
             </div>
@@ -134,15 +135,15 @@ export default function About() {
             </div>
 
             <div className="flex items-center gap-6 pt-4">
-              <a
-                href="/resume.pdf"
+              <Button
+                variant="primary"
+                href="/Papasin_LiamChristian_Resume.pdf"
                 download
-                className="group flex items-center gap-3 px-6 py-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 rounded-2xl transition-all duration-300 border-2 border-green-500 hover:scale-105 hover:shadow-lg hover:shadow-green-500/50"
+                icon={<Download className="w-5 h-5" />}
+                iconPosition="left"
               >
-                <Download className="w-5 h-5 text-white" />
-                <span className="font-semibold text-white">Download CV</span>
-                <ArrowRight className="w-5 h-5 text-white group-hover:translate-x-1 transition-transform" />
-              </a>
+                Download Resume
+              </Button>
 
               <div className="flex items-center gap-1">
                 <Image

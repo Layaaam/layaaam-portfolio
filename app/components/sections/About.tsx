@@ -58,7 +58,7 @@ export default function About() {
           <div className="relative flex justify-center group">
             <div className="absolute inset-0 bg-gradient-to-br from-green-400/20 to-green-600/20 rounded-full blur-3xl group-hover:blur-2xl transition-all" />
             <div className="relative">
-              <div className="relative w-80 h-80 rounded-full bg-gradient-to-br from-green-400 via-green-500 to-green-600 p-1 shadow-2xl shadow-green-500/50 group-hover:scale-105 transition-transform duration-500">
+              <div className="relative w-100 h-100 rounded-full bg-gradient-to-br from-green-400 via-green-500 to-green-600 p-1 shadow-2xl shadow-green-500/50 group-hover:scale-105 transition-transform duration-500">
                 <div className="w-full h-full rounded-full overflow-hidden bg-gradient-to-br from-green-50 to-green-100 flex items-end justify-center border-4 border-white/10">
                   <Image
                     src="/Liam_AboutMe.jpg"
@@ -90,12 +90,17 @@ export default function About() {
 
             <div className="relative pl-6">
               <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-green-400 via-green-500 to-transparent rounded-full" />
+              <p className="text-white/90 leading-relaxed text-lg font-bold">
+                A student and aspiring software developer with hands-on
+                experience building web and mobile applications.
+              </p>
+              <br />
               <p className="text-white/90 leading-relaxed text-lg">
-                I'm a passionate student and aspiring software developer
-                dedicated to creating innovative web and mobile applications.
-                With a strong foundation in modern technologies and a commitment
-                to continuous learning, I strive to build solutions that make a
-                meaningful impact in the IT industry.
+                I’m committed to learning and growing every single day, striving
+                to create reliable, practical solutions that tackle real
+                problems and deliver meaningful impact. I may still be on the
+                journey, but I’m dedicated to getting better with every project
+                and reaching my full potential.
               </p>
             </div>
 

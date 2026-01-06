@@ -72,9 +72,11 @@ export default function HeroSection() {
               </div>
 
               <p className="text-white/90 text-lg max-w-xl leading-relaxed">
-                Building innovative web and mobile applications with passion and
-                precision. Dedicated to making a meaningful impact in the IT
-                industry through cutting-edge solutions and continuous learning.
+                Aspiring software developer with hands-on experience delivering
+                10+ academic and personal web and mobile projects and a
+                background in student leadership. Still much to learn, but
+                highly disciplined, eager to learn, and reliable in delivering
+                practical, well-structured solutions.
               </p>
 
               <div className="flex gap-4 flex-wrap">

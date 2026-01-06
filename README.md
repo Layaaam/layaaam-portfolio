@@ -90,7 +90,7 @@ Key packages used in this project:
 
 This portfolio is deployed on Vercel with automatic deployments from the main branch.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/portfolio)
+[![Deploy with Vercel]([https://vercel.com/button](https://layaaam-portfolio.vercel.app)]([https://vercel.com/new](https://layaaam-portfolio.vercel.app/clone?repository-url=https://github.com/yourusername/portfolio](https://github.com/Layaaam/layaaam-portfolio))
 
 ## 📄 License
 

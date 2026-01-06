@@ -8,10 +8,10 @@ My personal portfolio website showcasing projects, skills, and professional expe
 
 I'm **Liam Christian B. Papasin**, a BS Information Technology student specializing in Software Development at Central Mindanao University. I focus on full-stack web and mobile application development with experience in student leadership and community tech initiatives.
 
-papasin.liamchristian@gmail.com  
-[LinkedIn](www.linkedin.com/in/liam-christian-74940b362) | [GitHub](https://github.com/Layaaam)
+ papasin.liamchristian@gmail.com  
+ [LinkedIn](https://www.linkedin.com/in/liam-christian-74940b362) |  [GitHub](https://github.com/Layaaam)
 
-## Built With
+##  Built With
 
 - **Next.js 15** - React framework for production
 - **React** - UI component library
@@ -19,7 +19,7 @@ papasin.liamchristian@gmail.com
 - **Tailwind CSS** - Utility-first CSS framework
 - **Vercel** - Deployment platform
 
-## Deployment
+##  Deployment
 
 This portfolio is deployed on Vercel with automatic deployments from the main branch.
 
@@ -31,7 +31,7 @@ Feel free to reach out for collaborations, opportunities, or just to connect!
 
 - Email: papasin.liamchristian@gmail.com
 - GitHub: [@Layaaam](https://github.com/Layaaam)
-- LinkedIn: [Your LinkedIn](www.linkedin.com/in/liam-christian-74940b362)
+- LinkedIn: [Liam Christian Papasin](https://www.linkedin.com/in/liam-christian-74940b362)
 
 ---
 

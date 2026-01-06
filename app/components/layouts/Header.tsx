@@ -73,7 +73,7 @@ export default function Header() {
   };
 
   const resumeClick = () => {
-    window.open("/resume.pdf", "_blank");
+    window.open("/Papasin_LiamChristian_Resume.pdf", "_blank");
   };
 
   const navLinks = [
@@ -108,7 +108,7 @@ export default function Header() {
           </span>
         </div>
 
-        <nav className="hidden md:flex items-center gap-12">
+        <nav className="hidden md:flex items-center gap-12 absolute left-1/2 transform -translate-x-1/2">
           {navLinks.map((link) => (
             <button
               key={link.label}
@@ -121,14 +121,19 @@ export default function Header() {
           ))}
         </nav>
 
-        <div className="hidden md:flex items-center gap-3">
-          <Button variant="secondary" onClick={resumeClick}>
+        {/* <div className="hidden md:flex items-center gap-3">
+          <Button variant="secondary" onClick={resumeClick} size="sm">
             RESUME
           </Button>
-          <Button variant="primary" icon={<SunIcon />}>
+          <Button
+            variant="primary"
+            icon={<SunIcon />}
+            iconPosition="left"
+            size="sm"
+          >
             DAYLIGHT
           </Button>
-        </div>
+        </div> */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           className="md:hidden text-white p-2 hover:bg-white/10 rounded-lg transition-colors"
@@ -162,10 +167,13 @@ export default function Header() {
             </button>
           ))}
 
-          <div className="flex flex-col gap-4 pt-8 w-full max-w-xs">
+          {/* TODO: Resume button is fully functional. Daylight Button is still on the design phase and no development implementaion yet.
+                    Soonest
+           */}
+          {/* <div className="flex flex-col gap-4 pt-8 w-full max-w-xs">
             <Button
               variant="secondary"
-              href="#resume"
+              onClick={resumeClick}
               className="w-full justify-center"
             >
               RESUME
@@ -173,11 +181,12 @@ export default function Header() {
             <Button
               variant="primary"
               icon={<SunIcon />}
+              iconPosition="left"
               className="w-full justify-center"
             >
               DAYLIGHT
             </Button>
-          </div>
+          </div> */}
 
           <div className="flex gap-4 pt-8">
             {["github", "linkedin", "twitter", "facebook"].map((platform) => (

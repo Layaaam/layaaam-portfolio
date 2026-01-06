@@ -170,7 +170,7 @@ export default function Projects() {
   return (
     <section
       id="projects"
-      className="relative min-h-screen py-24 bg-gradient-to-b from-black/40 to-black/60"
+      className="relative min-h-screen py-24 bg-gradient-to-b from-black/60 to-black/80"
     >
       <div className="container mx-auto px-6 lg:px-12 relative z-10">
         <div className="mb-20 text-center">

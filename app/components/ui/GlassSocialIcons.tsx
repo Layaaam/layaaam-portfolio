@@ -21,6 +21,7 @@ const createSocialIcons = (
   {
     id: "portfolio",
     label: "Portfolio",
+    href: "#",
     icon: () => (
       <Image
         src="/logo-white.svg"
@@ -34,6 +35,7 @@ const createSocialIcons = (
   {
     id: "facebook",
     label: "Facebook",
+    href: "https://www.facebook.com/share/1FZWw2bhxv/",
     icon: (size: number) => (
       <svg
         className="text-white relative z-10 drop-shadow-sm"
@@ -48,6 +50,7 @@ const createSocialIcons = (
   {
     id: "email",
     label: "Email",
+    href: "mailto:papasin.liamchristian@gmail.com",
     icon: (size: number) => (
       <svg
         className="text-white relative z-10 drop-shadow-sm"
@@ -65,6 +68,7 @@ const createSocialIcons = (
   {
     id: "linkedin",
     label: "LinkedIn",
+    href: "www.linkedin.com/in/liam-christian-74940b362",
     icon: (size: number) => (
       <svg
         className="text-white relative z-10 drop-shadow-sm"
@@ -89,8 +93,11 @@ export default function GlassSocialIcons({
   return (
     <div className="flex" style={{ gap: `${gap}px` }}>
       {socialIcons.map((social) => (
-        <button
+        <a
           key={social.id}
+          href={social.href}
+          target="_blank"
+          rel="noopener noreferrer"
           aria-label={social.label}
           className="group relative rounded-full backdrop-blur-[4px] bg-white/1 border border-white/30 flex items-center justify-center hover:bg-white/[0.15] transition-all duration-300 hover:scale-105 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.8),0_2px_8px_rgba(0,0,0,0.2)]"
           style={{
@@ -104,7 +111,7 @@ export default function GlassSocialIcons({
           />
           <div className="absolute inset-0 rounded-full bg-gradient-to-t from-black/20 to-transparent opacity-20" />
           {social.icon(iconSize)}
-        </button>
+        </a>
       ))}
     </div>
   );

@@ -30,9 +30,9 @@ const projects: Project[] = [
     id: 2,
     title: "TRANSYNC",
     description:
-      "An administrative web application developed as an initial foundation for managing fleet operations in BUKTRACK. Built to meet academic requirements and serve as the starting point for the capstone project.",
+      "An administrative web application developed as an initial foundation for managing fleet operations in BUKTRACK. Built to meet academic requirements and serve as the starting point for our capstone project.",
     image: "/project-images/TRANSYNC-web.png",
-    tags: ["Laravel", "PostgreSQL", "Tailwind CSS"],
+    tags: ["Laravel", "PostgreSQL", "Blade", "Tailwind CSS", "Leaflet"],
     link: "#",
     github: "#",
     type: "web",
@@ -74,7 +74,7 @@ const projects: Project[] = [
     id: 5,
     title: "The Blazer Website",
     description:
-      "A work-in-progress web platform designed for announcements and content distribution to subscribers, with administrative controls for content management.",
+      "A work-in-progress web platform designed for announcements and content distribution to around 3,000+ subscribers, with user access and administrative controls for content management.",
     image: "/project-images/BLAZER-web.png",
     tags: ["React", "Vite", "TypeScript", "Supabase"],
     link: "#",
@@ -179,7 +179,8 @@ export default function Projects() {
           </h2>
           <div className="h-1 w-32 bg-gradient-to-r from-green-400 to-transparent mx-auto rounded-full mb-6" />
           <p className="text-white/70 text-xl max-w-2xl mx-auto">
-            Showcasing my projects together
+            Showcasing my projects I have learned and developed throughout my
+            school and personal journey.
           </p>
         </div>
 
@@ -206,7 +207,11 @@ export default function Projects() {
               ))}
             </div>
 
-            <div className="flex gap-4 pt-4">
+            {/* 
+            TODO: Find a deployable sites for some of thse projects. Aside from the usual Vercel, Github Pages and Firebase Hosting
+                  For the Mobile Application, still do some research and enhancements ont those
+            */}
+            {/* <div className="flex gap-4 pt-4">
               {activeProject.link && (
                 <a
                   href={activeProject.link}
@@ -225,7 +230,7 @@ export default function Projects() {
                   <span>GitHub</span>
                 </a>
               )}
-            </div>
+            </div> */}
           </div>
 
           <div

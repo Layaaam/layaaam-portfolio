@@ -73,7 +73,7 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="relative min-h-screen py-10 bg-gradient-to-b from-black/60 to-black/80"
+      className="relative min-h-screen py-24 bg-gradient-to-b from-black/60 to-black/80"
     >
       <div className="container mx-auto px-6 lg:px-12">
         <div className="mb-16 text-center">

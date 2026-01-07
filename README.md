@@ -29,4 +29,4 @@ Feel free to reach out for collaborations, opportunities, or just to connect!
 
 ---
 
-_Built with ❤️ <3 using Next.js and deployed on Vercel_
+Built with ❤️ <3 using Next.js and deployed on Vercel_

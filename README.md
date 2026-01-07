@@ -13,11 +13,11 @@ papasin.liamchristian@gmail.com
 
 ## Built With
 
-- **Next.js 15** - React framework for production
-- **React** - UI component library
-- **TypeScript** - Type-safe JavaScript
-- **Tailwind CSS** - Utility-first CSS framework
-- **Vercel** - Deployment platform
+- **Next.js 15** 
+- **React**
+- **TypeScript**
+- **Tailwind CSS**
+- **Vercel**
 
 ## 🤝 Connect
 
@@ -29,4 +29,4 @@ Feel free to reach out for collaborations, opportunities, or just to connect!
 
 ---
 
-Built with ❤️ <3 using Next.js and deployed on Vercel_
+Built with ❤️ <3 using Next.js and deployed on Vercel

@@ -68,7 +68,7 @@ const createSocialIcons = (
   {
     id: "linkedin",
     label: "LinkedIn",
-    href: "www.linkedin.com/in/liam-christian-74940b362",
+    href: "https://linkedin.com/in/liam-christian-74940b362",
     icon: (size: number) => (
       <svg
         className="text-white relative z-10 drop-shadow-sm"
@@ -96,8 +96,28 @@ export default function GlassSocialIcons({
         <a
           key={social.id}
           href={social.href}
-          target="_blank"
-          rel="noopener noreferrer"
+          target={
+            social.id === "portfolio" || social.id === "email"
+              ? undefined
+              : "_blank"
+          }
+          rel={
+            social.id === "portfolio" || social.id === "email"
+              ? undefined
+              : "noopener noreferrer"
+          }
+          onClick={(e) => {
+            if (social.id === "portfolio") {
+              e.preventDefault();
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            } else if (social.id === "email") {
+              e.preventDefault();
+              window.open(
+                "https://mail.google.com/mail/?view=cm&to=papasin.liamchristian@gmail.com",
+                "_blank"
+              );
+            }
+          }}
           aria-label={social.label}
           className="group relative rounded-full backdrop-blur-[4px] bg-white/1 border border-white/30 flex items-center justify-center hover:bg-white/[0.15] transition-all duration-300 hover:scale-105 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.8),0_2px_8px_rgba(0,0,0,0.2)]"
           style={{

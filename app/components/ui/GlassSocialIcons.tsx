@@ -68,7 +68,7 @@ const createSocialIcons = (
   {
     id: "linkedin",
     label: "LinkedIn",
-    href: "https://linkedin.com/in/liam-christian-74940b362",
+    href: "https://linkedin.com/in/liam-christian-papasin-74940b362",
     icon: (size: number) => (
       <svg
         className="text-white relative z-10 drop-shadow-sm"

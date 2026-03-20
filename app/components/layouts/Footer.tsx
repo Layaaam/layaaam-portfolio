@@ -44,8 +44,7 @@ export default function Footer() {
           </div>
 
           <p className="text-white/60 text-sm leading-relaxed space-y-1">
-            Building digital solutions with passion and hard work. Let's create
-            something amazing together.
+            The cycle continues — if you want in on it, let's connect.
           </p>
 
           <div className="pt-8 border-t border-gray-700 w-full">

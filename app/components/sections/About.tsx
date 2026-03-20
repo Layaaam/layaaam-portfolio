@@ -99,7 +99,11 @@ export default function About() {
               <p className="text-white/90 leading-relaxed text-lg">
                 I'm committed to learning and growing every single day, striving
                 to create reliable, practical solutions that tackle real
-                problems and deliver meaningful impact. I may still be on the
+                problems and deliver meaningful impact. 
+              </p>
+              <br />
+              <p className="text-white/90 leading-relaxed text-lg">
+                I may still be on the
                 journey, but I'm dedicated to getting better with every project
                 and reaching my full potential.
               </p>

@@ -121,6 +121,7 @@ export default function Header() {
           ))}
         </nav>
 
+        {/* TODO: add animation and new daylight layout here for the portfolio. Currently the vibes sit well with dark mode. Do one for light or daylight mode */}
         {/* <div className="hidden md:flex items-center gap-3">
           <Button variant="secondary" onClick={resumeClick} size="sm">
             RESUME

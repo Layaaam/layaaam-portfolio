@@ -11,7 +11,7 @@ import HeroSection from "./components/sections/HeroSection";
 
 export default function Home() {
   return (
-    <>
+    <div className="overflow-x-hidden w-full">
       <main className="relative min-h-screen overflow-hidden">
         <div className="fixed inset-0 z-0">
           <Image
@@ -50,6 +50,6 @@ export default function Home() {
           animation: fade-in 0.5s ease-out;
         }
       `}</style>
-    </>
+    </div>
   );
 }

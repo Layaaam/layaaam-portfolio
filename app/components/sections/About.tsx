@@ -38,7 +38,7 @@ export default function About() {
   return (
     <section
       id="about"
-      className="relative min-h-screen py-24 bg-gradient-to-b from-black/40 via-black/50 to-black/60"
+      className="relative min-h-screen py-24 bg-gradient-to-b from-black/40 via-black/50 to-black/60 overflow-hidden"
     >
       <div className="container mx-auto px-6 lg:px-12 relative z-10">
         <div
@@ -55,7 +55,7 @@ export default function About() {
           <div className="h-1 w-32 bg-gradient-to-r from-green-400 to-transparent mx-auto rounded-full mb-6" />
         </div>
 
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center mb-24">
+        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center mb-24 [&>*]:min-w-0">
           <div className="relative flex justify-center group">
             <div className="absolute inset-0 bg-gradient-to-br from-green-400/20 to-green-600/20 rounded-full blur-3xl group-hover:blur-2xl transition-all" />
             <div className="relative">
@@ -75,12 +75,12 @@ export default function About() {
             </div>
           </div>
 
-          <div className="text-white space-y-6 mt-12 md:mt-0">
+          <div className="text-white space-y-6 mt-12 md:mt-0 min-w-0 w-full overflow-hidden">
             <div className="space-y-3">
               <h3 className="text-green-400 text-lg font-semibold tracking-wide uppercase">
                 GET TO KNOW ME
               </h3>
-              <h1 className="text-4xl md:text-5xl font-bold leading-tight">
+              <h1 className="text-4xl md:text-5xl font-bold leading-tight break-words">
                 <span className="bg-clip-text text-white">Who is </span>
                 <span className="bg-clip-text text-green-400">
                   Liam Christian
@@ -89,7 +89,7 @@ export default function About() {
               </h1>
             </div>
 
-            <div className="relative pl-6">
+            <div className="relative pl-6 min-w-0 overflow-hidden">
               <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-green-400 via-green-500 to-transparent rounded-full" />
               <p className="text-white/90 leading-relaxed text-lg font-bold">
                 A student and aspiring software developer with hands-on
@@ -164,9 +164,10 @@ export default function About() {
           </div>
         </div>
 
-        <div className="mb-12 overflow-hidden relative">
+        {/* Marquee wrapper — overflow hidden so it never bleeds outside the section */}
+        <div className="mb-12 overflow-hidden relative w-full">
           <div className="flex gap-6 whitespace-nowrap">
-            <div className="flex gap-6 animate-marquee">
+            <div className="flex gap-6 animate-marquee flex-shrink-0">
               {technologies.map((tech, index) => (
                 <div
                   key={`first-${index}`}
@@ -192,7 +193,7 @@ export default function About() {
                 </div>
               ))}
             </div>
-            <div className="flex gap-6 animate-marquee" aria-hidden="true">
+            <div className="flex gap-6 animate-marquee flex-shrink-0" aria-hidden="true">
               {technologies.map((tech, index) => (
                 <div
                   key={`second-${index}`}

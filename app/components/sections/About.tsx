@@ -164,7 +164,6 @@ export default function About() {
           </div>
         </div>
 
-        {/* Marquee wrapper — overflow hidden so it never bleeds outside the section */}
         <div className="mb-12 overflow-hidden relative w-full">
           <div className="flex gap-6 whitespace-nowrap">
             <div className="flex gap-6 animate-marquee flex-shrink-0">

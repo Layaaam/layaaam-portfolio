@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Button from "../ui/Button";
 import GlassSocialIcons from "../ui/GlassSocialIcons";
+import { useTheme } from "../../context/ThemeContext";
 
 const SunIcon = () => (
   <svg
@@ -19,6 +20,21 @@ const SunIcon = () => (
       stroke="currentColor"
       strokeWidth="1.5"
       strokeLinecap="round"
+    />
+  </svg>
+);
+
+const MoonIcon = () => (
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 16 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M13.5 8.7A5.5 5.5 0 0 1 7.3 2.5a5.5 5.5 0 1 0 6.2 6.2Z"
+      fill="currentColor"
     />
   </svg>
 );
@@ -58,6 +74,8 @@ const CloseIcon = () => (
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
+  const isDaylight = theme === "daylight";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -84,27 +102,50 @@ export default function Header() {
     { label: "CONTACT", href: "contact" },
   ];
 
+  const textColorClass = isDaylight ? "text-neutral-900" : "text-white";
+  const textMutedHover = isDaylight
+    ? "hover:text-green-600"
+    : "hover:text-green-400";
+  const underlineColor = isDaylight ? "bg-green-600" : "bg-green-400";
+
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between h-20 px-6 lg:px-12 transition-all duration-300 font-[family-name:var(--font-inter)] ${
-          scrolled
-            ? "bg-black/80 backdrop-blur-xl border-b border-white/10 shadow-2xl"
-            : "bg-black/20 backdrop-blur-sm border-b-2 border-white/20"
-        }`}
+        className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between h-16 px-6 lg:px-12 transition-all duration-500 font-[family-name:var(--font-inter)] ${isDaylight
+            ? "backdrop-blur-md border-b border-black/5"
+            : "backdrop-blur-md border-b border-white/10"
+          }`}
+        style={{
+          backgroundColor: isDaylight
+            ? scrolled
+              ? "rgba(255,255,255,0.75)"
+              : "rgba(255,255,255,0.55)"
+            : scrolled
+              ? "rgba(10,10,10,0.75)"
+              : "rgba(10,10,10,0.4)",
+          boxShadow: isDaylight
+            ? "0 1px 0 rgba(0,0,0,0.04), 0 4px 20px rgba(0,0,0,0.03)"
+            : "0 1px 0 rgba(255,255,255,0.06), 0 4px 20px rgba(0,0,0,0.3)",
+        }}
       >
         <div
           className="flex items-center gap-3 cursor-pointer"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         >
           <div
-            className={`transition-transform duration-300 ${
-              scrolled ? "scale-90" : "scale-100"
-            }`}
+            className={`transition-transform duration-300 ${scrolled ? "scale-90" : "scale-100"
+              }`}
           >
-            <Image src="/logo-white.svg" alt="Logo" width={50} height={50} />
+            <Image
+              src={isDaylight ? "/logo.svg" : "/logo-white.svg"}
+              alt="Logo"
+              width={50}
+              height={50}
+            />
           </div>
-          <span className="text-xs font-bold tracking-wider text-white hidden sm:block">
+          <span
+            className={`text-xs font-bold tracking-wider hidden sm:block transition-colors duration-300 ${textColorClass}`}
+          >
             LIAM CHRISTIAN
           </span>
         </div>
@@ -114,29 +155,31 @@ export default function Header() {
             <button
               key={link.label}
               onClick={() => scrollToSection(link.href)}
-              className="text-xs font-semibold tracking-wider text-white hover:text-green-400 transition-colors relative group"
+              className={`text-xs font-semibold tracking-wider transition-colors relative group ${textColorClass} ${textMutedHover}`}
             >
               {link.label}
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-green-400 group-hover:w-full transition-all duration-300" />
+              <span
+                className={`absolute -bottom-1 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-300 ${underlineColor}`}
+              />
             </button>
           ))}
         </nav>
 
-        {/* TODO: add animation and new daylight layout here for the portfolio. Currently the vibes sit well with dark mode. Do one for light or daylight mode */}
-        <div className="hidden md:flex items-center gap-3"> 
+        <div className="hidden md:flex items-center gap-3">
           <Button
-            variant="primary"
-            icon={<SunIcon />}
+            variant={isDaylight ? "primary" : "light"}
+            icon={isDaylight ? <MoonIcon /> : <SunIcon />}
             iconPosition="left"
             size="sm"
-            // onClick={}
+            onClick={toggleTheme}
           >
-            DAYLIGHT
+            {isDaylight ? "NIGHT" : "DAYLIGHT"}
           </Button>
         </div>
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden text-white p-2 hover:bg-white/10 rounded-lg transition-colors"
+          className={`md:hidden p-2 rounded-lg transition-colors ${textColorClass} ${isDaylight ? "hover:bg-black/5" : "hover:bg-white/10"
+            }`}
           aria-label="Toggle menu"
         >
           {mobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
@@ -144,14 +187,14 @@ export default function Header() {
       </header>
 
       <div
-        className={`fixed inset-0 z-40 md:hidden transition-all duration-300 ${
-          mobileMenuOpen
+        className={`fixed inset-0 z-40 md:hidden transition-all duration-300 ${mobileMenuOpen
             ? "opacity-100 pointer-events-auto"
             : "opacity-0 pointer-events-none"
-        }`}
+          }`}
       >
         <div
-          className="absolute inset-0 bg-black/90 backdrop-blur-xl"
+          className={`absolute inset-0 backdrop-blur-xl ${isDaylight ? "bg-white/90" : "bg-black/90"
+            }`}
           onClick={() => setMobileMenuOpen(false)}
         />
 
@@ -160,17 +203,14 @@ export default function Header() {
             <button
               key={link.label}
               onClick={() => scrollToSection(link.href)}
-              className="text-2xl font-bold text-white hover:text-green-400 transition-all transform hover:scale-110"
+              className={`text-2xl font-bold transition-all transform hover:scale-110 ${textColorClass} ${textMutedHover}`}
               style={{ animationDelay: `${index * 100}ms` }}
             >
               {link.label}
             </button>
           ))}
 
-          {/* TODO: Resume button is fully functional. Daylight Button is still on the design phase and no development implementaion yet.
-                    Soonest
-           */}
-          {/* <div className="flex flex-col gap-4 pt-8 w-full max-w-xs">
+          <div className="flex flex-col gap-4 pt-8 w-full max-w-xs">
             <Button
               variant="secondary"
               onClick={resumeClick}
@@ -179,17 +219,21 @@ export default function Header() {
               RESUME
             </Button>
             <Button
-              variant="primary"
-              icon={<SunIcon />}
+              variant={isDaylight ? "primary" : "light"}
+              icon={isDaylight ? <MoonIcon /> : <SunIcon />}
               iconPosition="left"
+              onClick={() => {
+                toggleTheme();
+                setMobileMenuOpen(false);
+              }}
               className="w-full justify-center"
             >
-              DAYLIGHT
+              {isDaylight ? "NIGHT" : "DAYLIGHT"}
             </Button>
-          </div> */}
+          </div>
 
           <div className="flex gap-4 pt-8">
-            <GlassSocialIcons/>
+            <GlassSocialIcons />
           </div>
         </div>
       </div>

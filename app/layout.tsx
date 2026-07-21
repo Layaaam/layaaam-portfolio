@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Space_Grotesk, Inter } from "next/font/google";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/react";
+import { ThemeProvider } from "./context/ThemeContext";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -32,7 +33,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${spaceGrotesk.variable} ${inter.variable}`}>
-      <body className="font-sans antialiased overflow-x-hidden">{children}<Analytics /></body>
+      <body className="font-sans antialiased overflow-x-hidden">
+        <ThemeProvider>
+          {children}
+          <Analytics />
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

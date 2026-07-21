@@ -2,7 +2,7 @@ import React from "react";
 
 interface ButtonProps {
   children: React.ReactNode;
-  variant?: "primary" | "secondary" | "ghost";
+  variant?: "primary" | "secondary" | "ghost" | "light";
   size?: "sm" | "md" | "lg";
   icon?: React.ReactNode;
   iconPosition?: "left" | "right";
@@ -43,6 +43,8 @@ export default function Button({
       "backdrop-blur-sm bg-white/5 hover:bg-white/10 border-2 border-white/30 hover:border-white/50 text-white",
     ghost:
       "text-white hover:bg-white/10 border-2 border-transparent hover:border-white/50",
+    light:
+      "bg-white hover:bg-neutral-100 border-2 border-white hover:shadow-lg hover:shadow-black/10 text-black",
   };
 
   const iconStyles = "transition-transform";

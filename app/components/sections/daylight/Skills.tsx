@@ -2,6 +2,37 @@
 
 import { useEffect, useState } from "react";
 
+function SkillsMobileView() {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const t = requestAnimationFrame(() => setVisible(true));
+    return () => cancelAnimationFrame(t);
+  }, []);
+
+  return (
+    <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-white px-8 text-center">
+      <div
+        className={`transition-all duration-1000 ease-out ${visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
+          }`}
+      >
+        <div className="mb-6 flex justify-center gap-2">
+          <span className="h-2 w-2 animate-bounce rounded-full bg-neutral-300 [animation-delay:-0.3s]" />
+          <span className="h-2 w-2 animate-bounce rounded-full bg-neutral-400 [animation-delay:-0.15s]" />
+          <span className="h-2 w-2 animate-bounce rounded-full bg-neutral-500" />
+        </div>
+
+        <h1 className="text-lg font-medium tracking-wide text-neutral-800">
+          Mobile view coming soon
+        </h1>
+        <p className="mt-2 text-sm text-neutral-400">
+          This site is best viewed on a larger screen for now.
+        </p>
+      </div>
+    </div>
+  );
+}
+
 const filters = [
   { label: "ALL", value: "all" },
   { label: "FRONTEND", value: "frontend" },
@@ -41,6 +72,7 @@ const CIRCUMFERENCE = 283;
 export default function Skills() {
   const [activeFilter, setActiveFilter] = useState<SkillFilter>("all");
   const [animatedIn, setAnimatedIn] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const visibleSkills =
     activeFilter === "all"
@@ -52,6 +84,10 @@ export default function Skills() {
     const timeout = setTimeout(() => setAnimatedIn(true), 80);
     return () => clearTimeout(timeout);
   }, [activeFilter]);
+
+  if (isMobile) {
+    return <SkillsMobileView />;
+  }
 
   return (
     <section id="skills" className="sk-section">

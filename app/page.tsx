@@ -17,8 +17,8 @@ import ContactDark from "./components/sections/dark/Contact";
 import HeroSectionDaylight from "./components/sections/daylight/HeroSection";
 import AboutDaylight from "./components/sections/daylight/AboutSection";
 import SkillsDaylight from "./components/sections/daylight/Skills";
-// import ProjectsDaylight from "./components/sections/daylight/Projects";
-// import ContactDaylight from "./components/sections/daylight/Contact";
+import ProjectsDaylight from "./components/sections/daylight/Projects";
+import ContactDaylight from "./components/sections/daylight/Contact";
 
 export default function Home() {
   const { theme, mounted } = useTheme();
@@ -34,9 +34,7 @@ export default function Home() {
             <>
               <div className="absolute inset-0 bg-[#e7e8ea]" />
               <div className="absolute inset-0 blur-[70px] opacity-60">
-                <div className="absolute w-[520px] h-[520px] -top-36 -left-28 rounded-full bg-green-300/60" />
                 <div className="absolute w-[460px] h-[460px] top-1/3 -right-40 rounded-full bg-slate-300/60" />
-                <div className="absolute w-[400px] h-[400px] -bottom-40 left-1/4 rounded-full bg-emerald-200/60" />
               </div>
             </>
           ) : (
@@ -62,8 +60,8 @@ export default function Home() {
         <>
           <AboutDaylight />
           <SkillsDaylight />
-          {/* <ProjectsDaylight />
-          <ContactDaylight /> */}
+          <ProjectsDaylight />
+          <ContactDaylight />
         </>
       ) : (
         <>

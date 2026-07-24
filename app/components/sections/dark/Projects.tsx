@@ -17,6 +17,39 @@ interface Project {
 const projects: Project[] = [
   {
     id: 1,
+    title: "MegaworldHomes",
+    description:
+      "A production-grade real estate marketing platform built solo as a freelance project, featuring a project-explorer landing page and fully-featured property microsites. Includes a scroll-driven, fully responsive UI with Intersection Observer animations, a cinematic splash screen, and a live client inquiry system powered by Resend.",
+    image: "/project-images/MEGAWORLDHOMES-web.png",
+    tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Resend", "Vercel"],
+    link: "#",
+    github: "#",
+    type: "web",
+  },
+  {
+    id: 2,
+    title: "PRDP Scale-Up Mindanao",
+    description:
+      "A public-facing web platform for the Philippine Rural Development Project's Scale-Up Mindanao initiative, focused on frontend design and implementation of the landing page. Features editable content management for mission updates, subproject information, reports, and gallery content, built to support the 5th World Bank WBI5m mission.",
+    image: "/project-images/PRDP-web.png",
+    tags: ["Laravel", "React", "TypeScript"],
+    link: "#",
+    github: "#",
+    type: "web",
+  },
+  {
+    id: 3,
+    title: "Metro Kidapawan Water District — Human Resource Information Management System",
+    description:
+      "A full-stack Human Resource Information Management System built for Metro Kidapawan Water District, led as the Payroll Processing module developer. Covers a 5-step payroll pipeline from period setup and employee loading through computation, floor check, and post-and-finalize workflows.",
+    image: "/project-images/MKWD-web.png",
+    tags: ["Laravel", "React", "TypeScript", "Shadcn/ui"],
+    link: "#",
+    github: "#",
+    type: "web",
+  },
+  {
+    id: 4,
     title: "BUKTRACK",
     description:
       "A capstone mobile and web-based bus information and tracking system designed to improve commuter awareness and public transport transparency in Bukidnon. Features real-time location tracking and map-based visualization.",
@@ -27,7 +60,7 @@ const projects: Project[] = [
     type: "mobile",
   },
   {
-    id: 2,
+    id: 5,
     title: "TRANSYNC",
     description:
       "An administrative web application developed as an initial foundation for managing fleet operations in BUKTRACK. Built to meet academic requirements and serve as the starting point for our capstone project.",
@@ -38,7 +71,7 @@ const projects: Project[] = [
     type: "web",
   },
   {
-    id: 3,
+    id: 6,
     title: "CMUPin",
     description:
       "A community-based disaster and climate information system that allows households to pin locations, update safety status, and receive alerts from administrators such as the Disaster Risk Reduction Office.",
@@ -60,7 +93,7 @@ const projects: Project[] = [
     type: "web",
   },
   {
-    id: 4,
+    id: 7,
     title: "NASA APOD Viewer",
     description:
       "A mobile application that consumes NASA's Astronomy Picture of the Day (APOD) API. Built as an introductory project to understand API integration, asynchronous data fetching, and mobile UI development.",
@@ -71,7 +104,7 @@ const projects: Project[] = [
     type: "mobile",
   },
   {
-    id: 5,
+    id: 8,
     title: "The Blazer Website",
     description:
       "A work-in-progress web platform designed for announcements and content distribution to around 3,000+ subscribers, with user access and administrative controls for content management.",
@@ -82,7 +115,7 @@ const projects: Project[] = [
     type: "web",
   },
   {
-    id: 6,
+    id: 9,
     title: "Musica",
     description:
       "A native Android music player developed as a culmination of foundational programming courses, applying object-oriented programming concepts, core data structures and algorithms discussions such as queues, local data storage, and media handling.",

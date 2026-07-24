@@ -1,114 +1,101 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
-function SkillsMobileView() {
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const t = requestAnimationFrame(() => setVisible(true));
-    return () => cancelAnimationFrame(t);
-  }, []);
-
-  return (
-    <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-white px-8 text-center">
-      <div
-        className={`transition-all duration-1000 ease-out ${visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
-          }`}
-      >
-        <div className="mb-6 flex justify-center gap-2">
-          <span className="h-2 w-2 animate-bounce rounded-full bg-neutral-300 [animation-delay:-0.3s]" />
-          <span className="h-2 w-2 animate-bounce rounded-full bg-neutral-400 [animation-delay:-0.15s]" />
-          <span className="h-2 w-2 animate-bounce rounded-full bg-neutral-500" />
-        </div>
-
-        <h1 className="text-lg font-medium tracking-wide text-neutral-800">
-          Mobile view coming soon
-        </h1>
-        <p className="mt-2 text-sm text-neutral-400">
-          This site is best viewed on a larger screen for now.
-        </p>
-      </div>
-    </div>
-  );
-}
+import { useState } from "react";
 
 const filters = [
   { label: "ALL", value: "all" },
-  { label: "FRONTEND", value: "frontend" },
-  { label: "BACKEND", value: "backend" },
+  { label: "LANGUAGES", value: "languages" },
+  { label: "FRAMEWORKS", value: "frameworks" },
+  { label: "DATABASES", value: "databases" },
   { label: "TOOLS", value: "tools" },
 ] as const;
 
 const skills = [
-  { name: "React", cat: "frontend", icon: "react", color: "#61DAFB", pct: 92 },
-  { name: "Next.js", cat: "frontend", icon: "nextdotjs", color: "#16171a", pct: 85 },
-  { name: "Vue.js", cat: "frontend", icon: "vuedotjs", color: "#4FC08D", pct: 70 },
-  { name: "Tailwind CSS", cat: "frontend", icon: "tailwindcss", color: "#06B6D4", pct: 90 },
-  { name: "Flutter", cat: "frontend", icon: "flutter", color: "#02569B", pct: 88 },
-  { name: "JavaScript", cat: "frontend", icon: "javascript", color: "#F7DF1E", pct: 90 },
-  { name: "Node.js", cat: "backend", icon: "nodedotjs", color: "#339933", pct: 80 },
-  { name: "Laravel", cat: "backend", icon: "laravel", color: "#FF2D20", pct: 90 },
-  { name: "PHP", cat: "backend", icon: "php", color: "#777BB4", pct: 82 },
-  { name: "Python", cat: "backend", icon: "python", color: "#3776AB", pct: 75 },
-  { name: "MySQL", cat: "backend", icon: "mysql", color: "#4479A1", pct: 85 },
-  { name: "Firebase", cat: "backend", icon: "firebase", color: "#FFCA28", pct: 88 },
-  { name: "Git", cat: "tools", icon: "git", color: "#F05032", pct: 90 },
-  { name: "GitHub", cat: "tools", icon: "github", color: "#16171a", pct: 90 },
-  { name: "Figma", cat: "tools", icon: "figma", color: "#F24E1E", pct: 75 },
-  {
-    name: "Android Studio",
-    cat: "tools",
-    icon: "androidstudio",
-    color: "#3DDC84",
-    pct: 78,
-  },
+  // Programming Languages
+  { name: "Python", cat: "languages", icon: "python", color: "#3776AB" },
+  { name: "Java", cat: "languages", icon: "openjdk", color: "#007396" },
+  { name: "JavaScript", cat: "languages", icon: "javascript", color: "#F7DF1E" },
+  { name: "PHP", cat: "languages", icon: "php", color: "#777BB4" },
+  { name: "Dart", cat: "languages", icon: "dart", color: "#0175C2" },
+  { name: "SQL", cat: "languages", icon: "mysql", color: "#4479A1" },
+
+  // Frameworks & Libraries
+  { name: "Flutter", cat: "frameworks", icon: "flutter", color: "#02569B" },
+  { name: "Laravel", cat: "frameworks", icon: "laravel", color: "#FF2D20" },
+  { name: "React", cat: "frameworks", icon: "react", color: "#61DAFB" },
+  { name: "Vue.js", cat: "frameworks", icon: "vuedotjs", color: "#4FC08D" },
+  { name: "Next.js", cat: "frameworks", icon: "nextdotjs", color: "#16171a" },
+  { name: "Node.js", cat: "frameworks", icon: "nodedotjs", color: "#339933" },
+
+  // Databases & Backend Services
+  { name: "MySQL", cat: "databases", icon: "mysql", color: "#4479A1" },
+  { name: "PostgreSQL", cat: "databases", icon: "postgresql", color: "#4169E1" },
+  { name: "SQLite", cat: "databases", icon: "sqlite", color: "#003B57" },
+  { name: "Firebase", cat: "databases", icon: "firebase", color: "#FFCA28" },
+  { name: "Supabase", cat: "databases", icon: "supabase", color: "#3ECF8E" },
+
+  // Tools & Development Environment
+  { name: "Visual Studio Code", cat: "tools", icon: "visualstudiocode", color: "#007ACC" },
+  { name: "Android Studio", cat: "tools", icon: "androidstudio", color: "#3DDC84" },
+  { name: "Git", cat: "tools", icon: "git", color: "#F05032" },
+  { name: "GitHub", cat: "tools", icon: "github", color: "#16171a" },
+  { name: "Figma", cat: "tools", icon: "figma", color: "#F24E1E" },
+  { name: "Adobe Photoshop", cat: "tools", icon: "adobephotoshop", color: "#31A8FF" },
 ] as const;
 
 type SkillFilter = (typeof filters)[number]["value"];
 
-const CIRCUMFERENCE = 283;
+// Shared neumorphic shadow recipes — kept as constants so every "raised" /
+// "pressed" surface stays in sync without a CSS class to maintain.
+const RAISED =
+  "bg-[var(--surface)] shadow-[10px_10px_22px_var(--shadow-dark),-10px_-10px_22px_var(--shadow-light)]";
+const RAISED_SM =
+  "shadow-[5px_5px_10px_var(--shadow-dark),-5px_-5px_10px_var(--shadow-light)]";
+const PRESSED =
+  "bg-[var(--surface)] shadow-[inset_7px_7px_14px_var(--shadow-dark),inset_-7px_-7px_14px_var(--shadow-light)]";
 
 export default function Skills() {
   const [activeFilter, setActiveFilter] = useState<SkillFilter>("all");
-  const [animatedIn, setAnimatedIn] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
 
   const visibleSkills =
     activeFilter === "all"
       ? skills
       : skills.filter((skill) => skill.cat === activeFilter);
 
-  useEffect(() => {
-    setAnimatedIn(false);
-    const timeout = setTimeout(() => setAnimatedIn(true), 80);
-    return () => clearTimeout(timeout);
-  }, [activeFilter]);
-
-  if (isMobile) {
-    return <SkillsMobileView />;
-  }
-
   return (
-    <section id="skills" className="sk-section">
-      <div className="sk-eyebrow">02 - Skills</div>
-      <h2 className="sk-title">The stack, dialed in.</h2>
-      <p className="sk-sub">
+    <section
+      id="skills"
+      className="relative z-[1] mx-auto max-w-[1240px] px-12 pt-[60px] pb-[140px]
+        text-[var(--ink)] font-[family-name:var(--font-inter)]
+        [--bg:#e7e8ea] [--surface:#eceef0] [--surface-2:#e2e4e7]
+        [--shadow-dark:#babcc2] [--shadow-light:#ffffff] [--ink:#16171a]
+        [--ink-muted:#6b6d74] [--ink-faint:#9a9ca3] [--accent:#6f8f76]
+        [--accent-deep:#4c6650] [--accent-tint:#dde5df]
+        max-[900px]:px-6 max-[900px]:pt-[60px] max-[900px]:pb-[90px]"
+    >
+      <h2 className="mb-[18px] font-[family-name:var(--font-space-grotesk)] text-[clamp(2.4rem,4vw,3.6rem)] font-bold leading-[1.05]">
+        The stack, dialed in.
+      </h2>
+      <p className="mb-16 max-w-[560px] text-[1.05rem] leading-relaxed text-[var(--ink-muted)]">
         Not a list of logos - a quick read on the tools I reach for when I am
         building, debugging, and shipping.
       </p>
 
-      <div className="sk-filter-row" aria-label="Skill filters">
+      <div className="mb-12 flex flex-wrap gap-3" aria-label="Skill filters">
         {filters.map((filter) => {
           const isActive = activeFilter === filter.value;
 
           return (
             <button
               key={filter.value}
-              className={`sk-chip ${isActive ? "sk-pressed active" : "sk-raised-sm"}`}
               type="button"
               onClick={() => setActiveFilter(filter.value)}
               aria-pressed={isActive}
+              className={`select-none rounded-full border-0 px-5 py-[11px] font-[family-name:var(--font-space-grotesk)] text-[0.75rem]
+                tracking-[0.03em] text-[var(--ink-muted)] transition-[color,transform,box-shadow] duration-[250ms]
+                hover:-translate-y-px hover:text-[var(--accent-deep)]
+                max-[460px]:[flex:1_1_calc(50%-6px)]
+                ${isActive ? `${PRESSED} font-medium text-[var(--accent-deep)]` : RAISED_SM}`}
             >
               {filter.label}
             </button>
@@ -116,260 +103,35 @@ export default function Skills() {
         })}
       </div>
 
-      <div className="sk-dial-grid">
-        {visibleSkills.map((skill) => {
-          const offset = animatedIn
-            ? CIRCUMFERENCE - (skill.pct / 100) * CIRCUMFERENCE
-            : CIRCUMFERENCE;
-
-          return (
-            <article className="sk-dial-card sk-raised" key={skill.name}>
-              <div className="sk-dial-wrap">
-                <svg width="104" height="104" viewBox="0 0 104 104" aria-hidden>
-                  <circle className="sk-dial-track" cx="52" cy="52" r="45" />
-                  <circle
-                    className="sk-dial-fill"
-                    cx="52"
-                    cy="52"
-                    r="45"
-                    style={{ strokeDashoffset: offset }}
-                  />
-                </svg>
-                <div className="sk-logo-shell sk-pressed">
-                  <span
-                    className="sk-logo"
-                    style={
-                      {
-                        "--skill-color": skill.color,
-                        "--skill-icon": `url(https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/${skill.icon}.svg)`,
-                      } as React.CSSProperties
-                    }
-                    aria-hidden
-                  />
-                </div>
-              </div>
-              <div className="sk-dial-name">{skill.name}</div>
-              <div className="sk-dial-cat sk-mono">{skill.cat}</div>
-            </article>
-          );
-        })}
+      <div className="grid grid-cols-4 gap-[26px] max-[900px]:grid-cols-2 max-[460px]:grid-cols-1">
+        {visibleSkills.map((skill) => (
+          <article
+            key={skill.name}
+            className={`${RAISED} flex flex-col items-center rounded-[22px] px-[18px] pb-[22px] pt-7 text-center
+              transition-transform duration-[250ms] hover:-translate-y-1`}
+          >
+            <div
+              className={`${PRESSED} relative mb-4 grid h-[78px] w-[78px] place-items-center rounded-full`}
+            >
+              <span
+                aria-hidden
+                className="block h-[38px] w-[38px] [mask-repeat:no-repeat] [mask-position:center] [mask-size:contain] [-webkit-mask-repeat:no-repeat] [-webkit-mask-position:center] [-webkit-mask-size:contain]"
+                style={{
+                  backgroundColor: skill.color,
+                  maskImage: `url(https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/${skill.icon}.svg)`,
+                  WebkitMaskImage: `url(https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/${skill.icon}.svg)`,
+                }}
+              />
+            </div>
+            <div className="mb-0.5 font-[family-name:var(--font-space-grotesk)] text-[0.95rem] font-semibold">
+              {skill.name}
+            </div>
+            <div className="font-[family-name:var(--font-space-grotesk)] text-[0.62rem] uppercase tracking-[0.06em] text-[var(--ink-faint)]">
+              {skill.cat}
+            </div>
+          </article>
+        ))}
       </div>
-
-      <style jsx>{`
-        .sk-section {
-          /* Fixes the stacking-context bug: page.tsx has a fixed-position
-             background layer. Without an explicit position here, this
-             plain section gets painted BEFORE (i.e. underneath) that
-             positioned layer in the browser's paint order, regardless of
-             DOM order — so it was invisible even though it rendered fine. */
-          position: relative;
-          z-index: 1;
-
-          --bg: #e7e8ea;
-          --surface: #eceef0;
-          --surface-2: #e2e4e7;
-          --shadow-dark: #babcc2;
-          --shadow-light: #ffffff;
-          --ink: #16171a;
-          --ink-muted: #6b6d74;
-          --ink-faint: #9a9ca3;
-          --accent: #6f8f76;
-          --accent-deep: #4c6650;
-          --accent-tint: #dde5df;
-
-          max-width: 1240px;
-          margin: 0 auto;
-          padding: 60px 48px 140px;
-          color: var(--ink);
-          font-family: var(--font-inter), sans-serif;
-        }
-
-        .sk-mono {
-          font-family: "JetBrains Mono", monospace;
-          letter-spacing: 0.02em;
-        }
-
-        .sk-eyebrow {
-          font-family: "JetBrains Mono", monospace;
-          font-size: 12.5px;
-          letter-spacing: 0.16em;
-          text-transform: uppercase;
-          color: var(--accent-deep);
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          margin-bottom: 22px;
-        }
-        .sk-eyebrow::before {
-          content: "";
-          width: 7px;
-          height: 7px;
-          border-radius: 50%;
-          background: var(--accent);
-          box-shadow: 0 0 0 4px var(--accent-tint);
-        }
-
-        .sk-title {
-          font-family: var(--font-space-grotesk), sans-serif;
-          font-weight: 700;
-          font-size: clamp(2.4rem, 4vw, 3.6rem);
-          line-height: 1.05;
-          margin-bottom: 18px;
-        }
-
-        .sk-sub {
-          color: var(--ink-muted);
-          font-size: 1.05rem;
-          max-width: 560px;
-          line-height: 1.6;
-          margin-bottom: 64px;
-        }
-
-        .sk-raised {
-          background: var(--surface);
-          box-shadow: 10px 10px 22px var(--shadow-dark),
-            -10px -10px 22px var(--shadow-light);
-        }
-        .sk-pressed {
-          background: var(--surface);
-          box-shadow: inset 7px 7px 14px var(--shadow-dark),
-            inset -7px -7px 14px var(--shadow-light);
-        }
-        .sk-raised-sm {
-          box-shadow: 5px 5px 10px var(--shadow-dark),
-            -5px -5px 10px var(--shadow-light);
-        }
-
-        .sk-filter-row {
-          display: flex;
-          gap: 12px;
-          margin-bottom: 48px;
-          flex-wrap: wrap;
-        }
-
-        .sk-chip {
-          border: 0;
-          font-family: "JetBrains Mono", monospace;
-          font-size: 0.75rem;
-          letter-spacing: 0.03em;
-          padding: 11px 20px;
-          border-radius: 30px;
-          cursor: pointer;
-          color: var(--ink-muted);
-          transition: color 0.25s ease, transform 0.25s ease,
-            box-shadow 0.25s ease;
-          user-select: none;
-        }
-        .sk-chip:hover {
-          transform: translateY(-1px);
-          color: var(--accent-deep);
-        }
-        .sk-chip.active {
-          color: var(--accent-deep);
-          font-weight: 500;
-        }
-
-        .sk-dial-grid {
-          display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: 26px;
-        }
-
-        .sk-dial-card {
-          border-radius: 22px;
-          padding: 28px 18px 22px;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          text-align: center;
-          transition: transform 0.25s ease, box-shadow 0.25s ease;
-        }
-        .sk-dial-card:hover {
-          transform: translateY(-4px);
-        }
-
-        .sk-dial-wrap {
-          position: relative;
-          width: 104px;
-          height: 104px;
-          margin-bottom: 16px;
-          display: grid;
-          place-items: center;
-        }
-        .sk-dial-wrap svg {
-          position: absolute;
-          inset: 0;
-          transform: rotate(-90deg);
-        }
-        .sk-dial-track {
-          fill: none;
-          stroke: var(--shadow-dark);
-          stroke-width: 8;
-          opacity: 0.5;
-        }
-        .sk-dial-fill {
-          fill: none;
-          stroke: var(--accent);
-          stroke-width: 8;
-          stroke-linecap: round;
-          stroke-dasharray: 283;
-          transition: stroke-dashoffset 1.4s cubic-bezier(0.3, 0.8, 0.3, 1);
-        }
-
-        .sk-logo-shell {
-          position: relative;
-          width: 66px;
-          height: 66px;
-          border-radius: 50%;
-          display: grid;
-          place-items: center;
-        }
-        .sk-logo {
-          width: 34px;
-          height: 34px;
-          display: block;
-          background: var(--skill-color);
-          -webkit-mask-image: var(--skill-icon);
-          mask-image: var(--skill-icon);
-          -webkit-mask-repeat: no-repeat;
-          mask-repeat: no-repeat;
-          -webkit-mask-position: center;
-          mask-position: center;
-          -webkit-mask-size: contain;
-          mask-size: contain;
-        }
-
-        .sk-dial-name {
-          font-family: var(--font-space-grotesk), sans-serif;
-          font-weight: 600;
-          font-size: 0.95rem;
-          margin-bottom: 2px;
-        }
-        .sk-dial-cat {
-          font-size: 0.62rem;
-          color: var(--ink-faint);
-          text-transform: uppercase;
-          letter-spacing: 0.06em;
-        }
-
-        @media (max-width: 900px) {
-          .sk-section {
-            padding: 60px 24px 90px;
-          }
-          .sk-dial-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
-        }
-
-        @media (max-width: 460px) {
-          .sk-dial-grid {
-            grid-template-columns: 1fr;
-          }
-          .sk-chip {
-            flex: 1 1 calc(50% - 6px);
-          }
-        }
-      `}</style>
     </section>
   );
 }

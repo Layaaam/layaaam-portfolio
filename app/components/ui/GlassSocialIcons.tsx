@@ -5,18 +5,23 @@ interface SocialIcon {
   icon: (iconSize: number) => React.ReactNode;
   href?: string;
   label: string;
+  color?: string;
 }
+
+type GlassVariant = "dark" | "light" | "neumorphic";
 
 interface GlassSocialIconsProps {
   buttonSize?: number;
   iconSize?: number;
   logoSize?: number;
   gap?: number;
+  variant?: GlassVariant;
 }
 
 const createSocialIcons = (
   logoSize: number,
-  iconSize: number
+  iconSize: number,
+  logoSrc: string
 ): SocialIcon[] => [
   {
     id: "portfolio",
@@ -24,7 +29,7 @@ const createSocialIcons = (
     href: "#",
     icon: () => (
       <Image
-        src="/logo-white.svg"
+        src={logoSrc}
         alt="Portfolio Logo"
         width={logoSize}
         height={logoSize}
@@ -36,9 +41,10 @@ const createSocialIcons = (
     id: "facebook",
     label: "Facebook",
     href: "https://www.facebook.com/share/1FZWw2bhxv/",
+    color: "#1877F2",
     icon: (size: number) => (
       <svg
-        className="text-white relative z-10 drop-shadow-sm"
+        className="relative z-10 drop-shadow-sm"
         style={{ width: `${size}px`, height: `${size}px` }}
         viewBox="0 0 24 24"
         fill="currentColor"
@@ -51,27 +57,38 @@ const createSocialIcons = (
     id: "email",
     label: "Email",
     href: "mailto:papasin.liamchristian@gmail.com",
+    color: "#EA4335",
     icon: (size: number) => (
-      <svg
-        className="text-white relative z-10 drop-shadow-sm"
-        style={{ width: `${size}px`, height: `${size}px` }}
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-      >
-        <rect x="3" y="5" width="18" height="14" rx="2" />
-        <polyline points="3 7 12 13 21 7" />
-      </svg>
+      <span
+        className="relative z-10 drop-shadow-sm"
+        style={{
+          display: "block",
+          width: `${size}px`,
+          height: `${size}px`,
+          backgroundColor: "currentColor",
+          WebkitMaskImage:
+            "url(https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/gmail.svg)",
+          maskImage:
+            "url(https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/gmail.svg)",
+          WebkitMaskRepeat: "no-repeat",
+          maskRepeat: "no-repeat",
+          WebkitMaskPosition: "center",
+          maskPosition: "center",
+          WebkitMaskSize: "contain",
+          maskSize: "contain",
+        }}
+        aria-hidden
+      />
     ),
   },
   {
     id: "linkedin",
     label: "LinkedIn",
     href: "https://linkedin.com/in/liam-christian-papasin-74940b362",
+    color: "#0A66C2",
     icon: (size: number) => (
       <svg
-        className="text-white relative z-10 drop-shadow-sm"
+        className="relative z-10 drop-shadow-sm"
         style={{ width: `${size}px`, height: `${size}px` }}
         viewBox="0 0 24 24"
         fill="currentColor"
@@ -82,13 +99,56 @@ const createSocialIcons = (
   },
 ];
 
+const variantStyles: Record<
+  GlassVariant,
+  {
+    button: string;
+    overlayTop: string;
+    overlayBottom: string;
+    iconColor: string;
+    logoSrc: string;
+    useBrandColor: boolean;
+  }
+> = {
+  dark: {
+    button:
+      "bg-white/[0.01] border border-white/30 hover:bg-white/[0.15] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.8),0_2px_8px_rgba(0,0,0,0.2)]",
+    overlayTop: "from-white/80 via-transparent to-transparent",
+    overlayBottom: "from-black/20 to-transparent",
+    iconColor: "text-white",
+    logoSrc: "/logo-white.svg",
+    useBrandColor: false,
+  },
+  light: {
+    button: "bg-transparent border border-black/[0.08] hover:bg-black/[0.04]",
+    overlayTop: "from-transparent via-transparent to-transparent",
+    overlayBottom: "from-transparent to-transparent",
+    iconColor: "text-[#16171a]",
+    logoSrc: "/logo.svg",
+    useBrandColor: false,
+  },
+  neumorphic: {
+    // Matches the raised/pressed soft-UI system already used across the
+    // daylight theme (Skills cards, Contact panel chips, etc.).
+    button:
+      "bg-[#eceef0] shadow-[5px_5px_10px_#babcc2,-5px_-5px_10px_#ffffff] hover:shadow-[3px_3px_6px_#babcc2,-3px_-3px_6px_#ffffff]",
+    overlayTop: "from-transparent via-transparent to-transparent",
+    overlayBottom: "from-transparent to-transparent",
+    iconColor: "text-[#16171a]",
+    logoSrc: "/logo.svg",
+    useBrandColor: true,
+  },
+};
+
 export default function GlassSocialIcons({
   buttonSize = 48,
   iconSize = 24,
   logoSize = 40,
   gap = 16,
+  variant = "dark",
 }: GlassSocialIconsProps) {
-  const socialIcons = createSocialIcons(logoSize, iconSize);
+  const styles = variantStyles[variant];
+  const socialIcons = createSocialIcons(logoSize, iconSize, styles.logoSrc);
 
   return (
     <div className="flex" style={{ gap: `${gap}px` }}>
@@ -119,17 +179,27 @@ export default function GlassSocialIcons({
             }
           }}
           aria-label={social.label}
-          className="group relative rounded-full backdrop-blur-[4px] bg-white/1 border border-white/30 flex items-center justify-center hover:bg-white/[0.15] transition-all duration-300 hover:scale-105 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.8),0_2px_8px_rgba(0,0,0,0.2)]"
+          className={`group relative rounded-full flex items-center justify-center transition-all duration-300 hover:scale-105 ${
+            variant === "neumorphic" ? "" : "backdrop-blur-[4px]"
+          } ${styles.iconColor} ${styles.button}`}
           style={{
             width: `${buttonSize}px`,
             height: `${buttonSize}px`,
+            color:
+              styles.useBrandColor && social.color ? social.color : undefined,
           }}
         >
-          <div
-            className="absolute inset-0 rounded-full bg-gradient-to-br from-white/80 via-transparent to-transparent opacity-20"
-            style={{ transform: "rotate(-45deg)" }}
-          />
-          <div className="absolute inset-0 rounded-full bg-gradient-to-t from-black/20 to-transparent opacity-20" />
+          {variant !== "neumorphic" && (
+            <>
+              <div
+                className={`absolute inset-0 rounded-full bg-gradient-to-br ${styles.overlayTop} opacity-20`}
+                style={{ transform: "rotate(-45deg)" }}
+              />
+              <div
+                className={`absolute inset-0 rounded-full bg-gradient-to-t ${styles.overlayBottom} opacity-20`}
+              />
+            </>
+          )}
           {social.icon(iconSize)}
         </a>
       ))}

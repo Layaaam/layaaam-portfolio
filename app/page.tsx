@@ -61,7 +61,7 @@ export default function Home() {
       {isDaylight ? (
         <>
           <AboutDaylight />
-          {/* <SkillsDaylight /> */}
+          <SkillsDaylight />
           {/* <ProjectsDaylight />
           <ContactDaylight /> */}
         </>

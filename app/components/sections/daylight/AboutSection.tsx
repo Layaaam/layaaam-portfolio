@@ -1,104 +1,153 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
+function AboutMobileView() {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const t = requestAnimationFrame(() => setVisible(true));
+    return () => cancelAnimationFrame(t);
+  }, []);
+
+  return (
+    <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-white px-8 text-center">
+      <div
+        className={`transition-all duration-1000 ease-out ${
+          visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
+        }`}
+      >
+        <div className="mb-6 flex justify-center gap-2">
+          <span className="h-2 w-2 animate-bounce rounded-full bg-neutral-300 [animation-delay:-0.3s]" />
+          <span className="h-2 w-2 animate-bounce rounded-full bg-neutral-400 [animation-delay:-0.15s]" />
+          <span className="h-2 w-2 animate-bounce rounded-full bg-neutral-500" />
+        </div>
+
+        <h1 className="text-lg font-medium tracking-wide text-neutral-800">
+          Mobile view coming soon
+        </h1>
+        <p className="mt-2 text-sm text-neutral-400">
+          This site is best viewed on a larger screen for now.
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export default function AboutSection() {
-    return (
-        <section id="about" style={{ paddingTop: "100px" }} className="ab-section">
-            
-            <div className="ab-grid">
-                <div className="ab-card ab-raised">
-                    <span className="ab-quote">&ldquo;</span>
-                    <p>
-                        I&apos;m Liam! A Full Stack Developer with a Cum Laude degree in
-                        BS Information Technology, specializing in Software Development,
-                        from Central Mindanao University. I like the
-                        unglamorous middle of a project more than the launch, the part
-                        where something&apos;s half-broken and you&apos;re figuring out
-                        why.
-                    </p>
-                    <p>
-                        I don't have everything figured out yet, but I build, I reflect, and I just keep going.
-                    </p>
+  const [isMobile, setIsMobile] = useState(false);
 
-                    <div className="ab-sign">
-                        <div className="ab-badge ab-raised-sm">
-                            <Image
-                                src="/logo.svg"
-                                alt="Liam Christian logo"
-                                width={28}
-                                height={28}
-                            />
-                        </div>
-                        <div className="ab-sign-text">
-                            <b>Liam Christian</b>
-                            Philippines
-                        </div>
-                    </div>
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
 
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
-                </div>
+  if (isMobile) {
+    return <AboutMobileView />;
+  }
 
-                {/* ---------------- Timeline ---------------- */}
-                <div className="ab-timeline">
-                    <div className="ab-t-item ab-raised">
-                        <div className="ab-t-node ab-raised-sm" />
-                        <div className="ab-t-top">
-                            <span className="ab-t-role">Full Stack Developer Intern</span>
-                            <span className="ab-t-period ab-mono">Internship</span>
-                        </div>
-                        <div className="ab-t-org">OBX Solutions Technology Inc.</div>
-                        <div className="ab-t-desc">
-                            Built and shipped features across the stack in production
-                            codebases — from database-backed APIs to the interfaces people
-                            actually clicked on.
-                        </div>
-                        <div className="ab-t-tags">
-                            <span className="ab-pressed">Laravel</span>
-                            <span className="ab-pressed">React</span>
-                            <span className="ab-pressed">TypeScript</span>
-                            <span className="ab-pressed">Shadcn/ui</span>
-                        </div>
-                    </div>
+  return (
+    <section id="about" style={{ paddingTop: "100px" }} className="ab-section">
 
-                    <div className="ab-t-item ab-raised">
-                        <div className="ab-t-node ab-raised-sm" />
-                        <div className="ab-t-top">
-                            <span className="ab-t-role">Freelance Frontend Developer</span>
-                            <span className="ab-t-period ab-mono">Freelance</span>
-                        </div>
-                        <div className="ab-t-org">Megaworld Homes</div>
-                        <div className="ab-t-desc">
-                            Built landing pages with custom animations and SEO in mind —
-                            learned to balance a client&apos;s brand with real performance
-                            constraints.
-                        </div>
-                        <div className="ab-t-tags">
-                            <span className="ab-pressed">Next.js</span>
-                            <span className="ab-pressed">SEO</span>
-                            <span className="ab-pressed">Animation</span>
-                        </div>
-                    </div>
+      <div className="ab-grid">
+        <div className="ab-card ab-raised">
+          <span className="ab-quote">&ldquo;</span>
+          <p>
+            I&apos;m Liam! A Full Stack Developer with a Cum Laude degree in
+            BS Information Technology, specializing in Software Development,
+            from Central Mindanao University. I like the
+            unglamorous middle of a project more than the launch, the part
+            where something&apos;s half-broken and you&apos;re figuring out
+            why.
+          </p>
+          <p>
+            I don't have everything figured out yet, but I build, I reflect, and I just keep going.
+          </p>
 
-                    <div className="ab-t-item ab-raised">
-                        <div className="ab-t-node ab-raised-sm" />
-                        <div className="ab-t-top">
-                            <span className="ab-t-role">BS Information Technology</span>
-                            <span className="ab-t-period ab-mono">2022 — 2026</span>
-                        </div>
-                        <div className="ab-t-org">Central Mindanao University - Cum Laude, GWA 1.546</div>
-                        <div className="ab-t-desc">
-                            Capstone: BUKTRACK, a real-time public bus tracking system for
-                            PABAMA Corp built with Firebase and the Google Maps API,
-                            evaluated with 102 respondents.
-                        </div>
-                        <div className="ab-t-tags">
-                            <span className="ab-pressed">Firebase</span>
-                            <span className="ab-pressed">Google Maps API</span>
-                        </div>
-                    </div>
-                </div>
+          <div className="ab-sign">
+            <div className="ab-badge ab-raised-sm">
+              <Image
+                src="/logo.svg"
+                alt="Liam Christian logo"
+                width={28}
+                height={28}
+              />
             </div>
+            <div className="ab-sign-text">
+              <b>Liam Christian</b>
+              Philippines
+            </div>
+          </div>
 
-            <style jsx>{`
+
+        </div>
+
+        {/* ---------------- Timeline ---------------- */}
+        <div className="ab-timeline">
+          <div className="ab-t-item ab-raised">
+            <div className="ab-t-node ab-raised-sm" />
+            <div className="ab-t-top">
+              <span className="ab-t-role">Full Stack Developer Intern</span>
+              <span className="ab-t-period ab-mono">Internship</span>
+            </div>
+            <div className="ab-t-org">OBX Solutions Technology Inc.</div>
+            <div className="ab-t-desc">
+              Built and shipped features across the stack in production
+              codebases — from database-backed APIs to the interfaces people
+              actually clicked on.
+            </div>
+            <div className="ab-t-tags">
+              <span className="ab-pressed">Laravel</span>
+              <span className="ab-pressed">React</span>
+              <span className="ab-pressed">TypeScript</span>
+              <span className="ab-pressed">Shadcn/ui</span>
+            </div>
+          </div>
+
+          <div className="ab-t-item ab-raised">
+            <div className="ab-t-node ab-raised-sm" />
+            <div className="ab-t-top">
+              <span className="ab-t-role">Freelance Frontend Developer</span>
+              <span className="ab-t-period ab-mono">Freelance</span>
+            </div>
+            <div className="ab-t-org">Megaworld Homes</div>
+            <div className="ab-t-desc">
+              Built landing pages with custom animations and SEO in mind —
+              learned to balance a client&apos;s brand with real performance
+              constraints.
+            </div>
+            <div className="ab-t-tags">
+              <span className="ab-pressed">Next.js</span>
+              <span className="ab-pressed">SEO</span>
+              <span className="ab-pressed">Animation</span>
+            </div>
+          </div>
+
+          <div className="ab-t-item ab-raised">
+            <div className="ab-t-node ab-raised-sm" />
+            <div className="ab-t-top">
+              <span className="ab-t-role">BS Information Technology</span>
+              <span className="ab-t-period ab-mono">2022 — 2026</span>
+            </div>
+            <div className="ab-t-org">Central Mindanao University - Cum Laude, GWA 1.546</div>
+            <div className="ab-t-desc">
+              Capstone: BUKTRACK, a real-time public bus tracking system for
+              PABAMA Corp built with Firebase and the Google Maps API,
+              evaluated with 102 respondents.
+            </div>
+            <div className="ab-t-tags">
+              <span className="ab-pressed">Firebase</span>
+              <span className="ab-pressed">Google Maps API</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <style jsx>{`
         @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap");
 
         .ab-section {
@@ -365,6 +414,6 @@ export default function AboutSection() {
           }
         }
       `}</style>
-        </section>
-    );
+    </section>
+  );
 }

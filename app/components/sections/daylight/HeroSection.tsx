@@ -3,12 +3,55 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 
+function HeroMobileView() {
+    const [visible, setVisible] = useState(false);
+
+    useEffect(() => {
+        const t = requestAnimationFrame(() => setVisible(true));
+        return () => cancelAnimationFrame(t);
+    }, []);
+
+    return (
+        <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-white px-8 text-center">
+            <div
+                className={`transition-all duration-1000 ease-out ${
+                    visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
+                }`}
+            >
+                <div className="mb-6 flex justify-center gap-2">
+                    <span className="h-2 w-2 animate-bounce rounded-full bg-neutral-300 [animation-delay:-0.3s]" />
+                    <span className="h-2 w-2 animate-bounce rounded-full bg-neutral-400 [animation-delay:-0.15s]" />
+                    <span className="h-2 w-2 animate-bounce rounded-full bg-neutral-500" />
+                </div>
+
+                <h1 className="text-lg font-medium tracking-wide text-neutral-800">
+                    Mobile view coming soon
+                </h1>
+                <p className="mt-2 text-sm text-neutral-400">
+                    This site is best viewed on a larger screen for now.
+                </p>
+            </div>
+        </div>
+    );
+}
+
 export default function HeroSection() {
     const [mounted, setMounted] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
         setMounted(true);
+
+        const check = () => setIsMobile(window.innerWidth < 768);
+        check();
+
+        window.addEventListener("resize", check);
+        return () => window.removeEventListener("resize", check);
     }, []);
+
+    if (isMobile) {
+        return <HeroMobileView />;
+    }
 
     return (
         <section className="relative h-screen w-full overflow-hidden bg-[#eef0f1]">

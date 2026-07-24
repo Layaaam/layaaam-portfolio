@@ -62,7 +62,7 @@ export default function Footer() {
           </nav>
 
           <div className="flex justify-center">
-            <GlassSocialIcons />
+            <GlassSocialIcons variant={isDaylight ? "neumorphic" : "dark"} />
           </div>
 
           <p

@@ -37,7 +37,6 @@ function useTypedLine(lines: readonly string[]) {
       return () => clearTimeout(t);
     }
 
-    // deleting
     if (text.length > 0) {
       const t = setTimeout(() => setText(current.slice(0, text.length - 1)), 20);
       return () => clearTimeout(t);
@@ -99,7 +98,7 @@ export default function Projects() {
           <span className="whitespace-pre">{typed}</span>
           <span
             aria-hidden
-            className="ml-[3px] h-[1.1em] w-2 flex-shrink-0 animate-[blink_1s_step-end_infinite] bg-[var(--accent-deep)] motion-reduce:animate-none"
+            className="relative top-[3.5px] ml-[3px] h-[1.1em] w-2 flex-shrink-0 animate-[blink_1s_step-end_infinite] bg-[var(--accent-deep)] motion-reduce:animate-none"
           />
         </div>
       </div>

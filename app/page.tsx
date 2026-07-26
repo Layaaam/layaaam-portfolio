@@ -32,9 +32,9 @@ export default function Home() {
         <div className="fixed inset-0 z-0 transition-opacity duration-500">
           {isDaylight ? (
             <>
-              <div className="absolute inset-0 bg-[#e7e8ea]" />
+              <div className="absolute inset-0 bg-[#e7e8ea] transition-opacity duration-700" />
               <div className="absolute inset-0 blur-[70px] opacity-60">
-                <div className="absolute w-[460px] h-[460px] top-1/3 -right-40 rounded-full bg-slate-300/60" />
+                <div className="absolute w-[460px] h-[460px] top-1/3 -right-40 animate-[drift_18s_ease-in-out_infinite] rounded-full bg-slate-300/60 motion-reduce:animate-none" />
               </div>
             </>
           ) : (
@@ -47,30 +47,34 @@ export default function Home() {
                 priority
               />
               <div className="absolute inset-0 bg-gradient-to-br from-black/40 via-transparent to-black/60" />
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(34,197,94,0.1),transparent_50%)]" />
+              <div className="absolute inset-0 animate-[drift_18s_ease-in-out_infinite] bg-[radial-gradient(circle_at_50%_50%,rgba(34,197,94,0.1),transparent_50%)] motion-reduce:animate-none" />
             </>
           )}
         </div>
 
         <Header />
-        {isDaylight ? <HeroSectionDaylight /> : <HeroSectionDark />}
+        <div key={`hero-${theme}`} className="animate-fade-in">
+          {isDaylight ? <HeroSectionDaylight /> : <HeroSectionDark />}
+        </div>
       </main>
 
-      {isDaylight ? (
-        <>
-          <AboutDaylight />
-          <SkillsDaylight />
-          <ProjectsDaylight />
-          <ContactDaylight />
-        </>
-      ) : (
-        <>
-          <AboutDark />
-          <SkillsDark />
-          <ProjectsDark />
-          <ContactDark />
-        </>
-      )}
+      <div key={`sections-${theme}`} className="animate-fade-in">
+        {isDaylight ? (
+          <>
+            <AboutDaylight />
+            <SkillsDaylight />
+            <ProjectsDaylight />
+            <ContactDaylight />
+          </>
+        ) : (
+          <>
+            <AboutDark />
+            <SkillsDark />
+            <ProjectsDark />
+            <ContactDark />
+          </>
+        )}
+      </div>
 
       <Footer />
 
@@ -87,6 +91,15 @@ export default function Home() {
         }
         .animate-fade-in {
           animation: fade-in 0.5s ease-out;
+        }
+        @keyframes drift {
+          0%,
+          100% {
+            transform: translate(0, 0) scale(1);
+          }
+          50% {
+            transform: translate(-24px, 18px) scale(1.05);
+          }
         }
       `}</style>
     </div>

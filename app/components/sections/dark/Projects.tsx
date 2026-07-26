@@ -281,21 +281,19 @@ export default function Projects() {
                   }}
                 >
                   <div
-                    className={`relative backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl overflow-hidden shadow-2xl shadow-black/50 ${
-                      project.type === "mobile"
+                    className={`relative backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl overflow-hidden shadow-2xl shadow-black/50 ${project.type === "mobile"
                         ? "w-[340px] h-[600px]"
                         : "w-[600px] h-[300px]"
-                    }`}
+                      }`}
                   >
                     <div className="relative h-full overflow-hidden bg-gradient-to-br from-slate-700 to-slate-800">
                       <img
                         src={project.image || "/api/placeholder/800/600"}
                         alt={project.title}
-                        className={`w-full h-full ${
-                          project.type === "mobile"
+                        className={`w-full h-full ${project.type === "mobile"
                             ? "object-contain"
                             : "object-contain"
-                        } opacity-90`}
+                          } opacity-90`}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
 

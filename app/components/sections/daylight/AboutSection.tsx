@@ -1,7 +1,30 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+
+function useReveal<T extends HTMLElement>() {
+  const ref = useRef<T | null>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.15 }
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  return { ref, visible };
+}
 
 function AboutMobileView() {
   const [visible, setVisible] = useState(false);
@@ -35,16 +58,14 @@ function AboutMobileView() {
   );
 }
 
-// Shared neumorphic shadow recipes.
-const RAISED =
-  "bg-[var(--surface)] shadow-[10px_10px_22px_var(--shadow-dark),-10px_-10px_22px_var(--shadow-light)]";
-const RAISED_SM =
-  "shadow-[5px_5px_10px_var(--shadow-dark),-5px_-5px_10px_var(--shadow-light)]";
-const PRESSED =
-  "bg-[var(--surface)] shadow-[inset_7px_7px_14px_var(--shadow-dark),inset_-7px_-7px_14px_var(--shadow-light)]";
+const RAISED = "bg-[var(--surface)] shadow-[10px_10px_22px_var(--shadow-dark),-10px_-10px_22px_var(--shadow-light)]";
+const RAISED_SM = "shadow-[5px_5px_10px_var(--shadow-dark),-5px_-5px_10px_var(--shadow-light)]";
+const PRESSED = "bg-[var(--surface)] shadow-[inset_7px_7px_14px_var(--shadow-dark),inset_-7px_-7px_14px_var(--shadow-light)]";
 
 export default function AboutSection() {
   const [isMobile, setIsMobile] = useState(false);
+  const { ref: headingRef, visible: headingVisible } = useReveal<HTMLDivElement>();
+  const { ref: gridRef, visible: gridVisible } = useReveal<HTMLDivElement>();
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -69,17 +90,31 @@ export default function AboutSection() {
         [--accent-deep:#4c6650] [--accent-tint:#dde5df] [--radius:26px] [--radius-sm:14px]
         max-[900px]:px-6 max-[900px]:py-[90px]"
     >
-      <h2 className="mb-[18px] font-[family-name:var(--font-space-grotesk)] text-[clamp(2.4rem,4vw,3.6rem)] font-bold leading-[1.05] tracking-[-0.01em]">
-        Not everything&apos;s
-        <br />
-        figured out. It still ships.
-      </h2>
-      <p className="mb-16 max-w-[560px] text-[1.05rem] leading-relaxed text-[var(--ink-muted)]">
-        A quick look at how I got here, and the roles that shaped how I build.
-      </p>
+      <div
+        ref={headingRef}
+        className={`transition-all duration-700 ease-out ${
+          headingVisible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
+        }`}
+      >
+        <h2 className="mb-[18px] font-[family-name:var(--font-space-grotesk)] text-[clamp(2.4rem,4vw,3.6rem)] font-bold leading-[1.05] tracking-[-0.01em]">
+          Not everything&apos;s
+          <br />
+          figured out. It still ships.
+        </h2>
+        <p className="mb-16 max-w-[560px] text-[1.05rem] leading-relaxed text-[var(--ink-muted)]">
+          A quick look at how I got here, and the roles that shaped how I build.
+        </p>
+      </div>
 
-      <div className="grid grid-cols-[0.85fr_1.15fr] items-start gap-16 max-[900px]:grid-cols-1">
-        <div className={`${RAISED} relative rounded-[var(--radius)] px-10 py-11`}>
+      <div
+        ref={gridRef}
+        className="grid grid-cols-[0.85fr_1.15fr] items-start gap-16 max-[900px]:grid-cols-1"
+      >
+        <div
+          className={`${RAISED} relative rounded-[var(--radius)] px-10 py-11 transition-all duration-700 ease-out ${
+            gridVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
+          }`}
+        >
           <span className="mb-[18px] block font-[family-name:var(--font-space-grotesk)] text-[4rem] leading-[0.6] text-[var(--accent)]">
             &ldquo;
           </span>
@@ -115,7 +150,6 @@ export default function AboutSection() {
           </div>
         </div>
 
-        {/* ---------------- Timeline ---------------- */}
         <div className="relative pl-[46px]">
           <div
             className="absolute bottom-[6px] left-[17px] top-[6px] w-[2px]"
@@ -150,9 +184,10 @@ export default function AboutSection() {
           ].map((item, i, arr) => (
             <div
               key={item.role}
-              className={`${RAISED} relative rounded-[20px] px-7 py-[26px] ${
-                i === arr.length - 1 ? "" : "mb-[22px]"
-              }`}
+              style={{ transitionDelay: gridVisible ? `${150 + i * 130}ms` : "0ms" }}
+              className={`${RAISED} relative rounded-[20px] px-7 py-[26px] transition-all duration-700 ease-out ${
+                gridVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
+              } ${i === arr.length - 1 ? "" : "mb-[22px]"}`}
             >
               <div
                 className={`${RAISED_SM} absolute -left-[46px] top-7 flex h-[34px] w-[34px] items-center justify-center rounded-full after:h-[10px] after:w-[10px] after:rounded-full after:bg-[var(--accent)] after:content-['']`}

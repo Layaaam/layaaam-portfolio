@@ -1,6 +1,29 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
+function useReveal<T extends HTMLElement>() {
+  const ref = useRef<T | null>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.15 }
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  return { ref, visible };
+}
 
 const logLines = [
   "mapping out the architecture",
@@ -53,6 +76,7 @@ const RAISED =
 
 export default function Projects() {
   const typed = useTypedLine(logLines);
+  const { ref: revealRef, visible } = useReveal<HTMLDivElement>();
 
   return (
     <section
@@ -65,26 +89,36 @@ export default function Projects() {
         [--accent-deep:#4c6650] [--accent-tint:#dde5df]
         max-[900px]:px-6 max-[900px]:pb-[90px]"
     >
-      <div className="mb-[22px] flex items-center gap-[10px] font-[family-name:var(--font-space-grotesk)] text-[12.5px] uppercase tracking-[0.16em] text-[var(--accent-deep)]">
-        <span className="relative flex h-[7px] w-[7px]">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--accent)] opacity-75 motion-reduce:animate-none" />
-          <span className="relative inline-flex h-[7px] w-[7px] rounded-full bg-[var(--accent)]" />
-        </span>
-        STATUS: IN PROGRESS
+      <div
+        ref={revealRef}
+        className={`transition-all duration-700 ease-out ${visible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
+          }`}
+      >
+        <div className="mb-[22px] flex items-center gap-[10px] font-[family-name:var(--font-space-grotesk)] text-[12.5px] uppercase tracking-[0.16em] text-[var(--accent-deep)]">
+          <span className="relative flex h-[7px] w-[7px]">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--accent)] opacity-75 motion-reduce:animate-none" />
+            <span className="relative inline-flex h-[7px] w-[7px] rounded-full bg-[var(--accent)]" />
+          </span>
+          STATUS: IN PROGRESS
+        </div>
+
+        <h2 className="mb-[18px] font-[family-name:var(--font-space-grotesk)] text-[clamp(2.4rem,4vw,3.6rem)] font-bold leading-[1.05] tracking-[-0.01em]">
+          Projects — the highlight reel
+          <br />
+          is still rendering.
+        </h2>
+        <p className="mb-12 max-w-[560px] text-[1.05rem] leading-relaxed text-[var(--ink-muted)]">
+          This is the part where something&apos;s half-broken and I&apos;m
+          figuring out why. Case studies are being written up properly instead
+          of dropped here half-finished.
+        </p>
       </div>
 
-      <h2 className="mb-[18px] font-[family-name:var(--font-space-grotesk)] text-[clamp(2.4rem,4vw,3.6rem)] font-bold leading-[1.05] tracking-[-0.01em]">
-        Projects — the highlight reel
-        <br />
-        is still rendering.
-      </h2>
-      <p className="mb-12 max-w-[560px] text-[1.05rem] leading-relaxed text-[var(--ink-muted)]">
-        This is the part where something&apos;s half-broken and I&apos;m
-        figuring out why. Case studies are being written up properly instead
-        of dropped here half-finished.
-      </p>
-
-      <div className={`${RAISED} max-w-[640px] overflow-hidden rounded-[22px] max-[900px]:max-w-full`}>
+      <div
+        style={{ transitionDelay: visible ? "150ms" : "0ms" }}
+        className={`${RAISED} max-w-[640px] overflow-hidden rounded-[22px] transition-all duration-700 ease-out max-[900px]:max-w-full ${visible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
+          }`}
+      >
         <div className="flex items-center gap-2 border-b border-[var(--shadow-dark)] px-5 py-4">
           <span className="h-[10px] w-[10px] rounded-full bg-[#e0645c] opacity-85" />
           <span className="h-[10px] w-[10px] rounded-full bg-[#e0b04c] opacity-85" />
@@ -103,7 +137,11 @@ export default function Projects() {
         </div>
       </div>
 
-      <div className="mt-6 font-[family-name:var(--font-space-grotesk)] text-[0.78rem] text-[var(--ink-faint)]">
+      <div
+        style={{ transitionDelay: visible ? "250ms" : "0ms" }}
+        className={`mt-6 font-[family-name:var(--font-space-grotesk)] text-[0.78rem] text-[var(--ink-faint)] transition-all duration-700 ease-out ${visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
+          }`}
+      >
         Want the details now instead of later? Ask directly — happy to walk
         through what I&apos;ve built.
       </div>

@@ -4,34 +4,108 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 
 function HeroMobileView() {
-    const [visible, setVisible] = useState(false);
+    const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
-        const t = requestAnimationFrame(() => setVisible(true));
+        const t = requestAnimationFrame(() => setMounted(true));
         return () => cancelAnimationFrame(t);
     }, []);
 
     return (
-        <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-white px-8 text-center">
+        <section className="relative h-[100dvh] w-full overflow-hidden bg-[#eef0f1]">
+            {/* Background */}
+            <div className="absolute inset-0 z-0">
+                <Image
+                    src="/daylight-background-mobile.png"
+                    alt=""
+                    fill
+                    priority
+                    className="object-cover"
+                />
+            </div>
+
+            {/* Header */}
+            <div className="relative z-30 flex items-center justify-between px-6 pt-6">
+                <span className="font-[family-name:var(--font-inter)] text-3xl italic text-neutral-800">
+                    L
+                </span>
+                <button
+                    aria-label="Open menu"
+                    className="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm"
+                >
+                    <span className="flex flex-col gap-[5px]">
+                        <span className="h-[2px] w-4 bg-neutral-800" />
+                        <span className="h-[2px] w-4 bg-neutral-800" />
+                        <span className="h-[2px] w-4 bg-neutral-800" />
+                    </span>
+                </button>
+            </div>
+
             <div
-                className={`transition-all duration-1000 ease-out ${
-                    visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
+                className={`relative z-10 h-full w-full transition-all duration-1000 ease-out ${
+                    mounted ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
                 }`}
             >
-                <div className="mb-6 flex justify-center gap-2">
-                    <span className="h-2 w-2 animate-bounce rounded-full bg-neutral-300 [animation-delay:-0.3s]" />
-                    <span className="h-2 w-2 animate-bounce rounded-full bg-neutral-400 [animation-delay:-0.15s]" />
-                    <span className="h-2 w-2 animate-bounce rounded-full bg-neutral-500" />
+                {/* FULL STACK */}
+                <h1
+                    className="absolute left-[29%] top-[17vh] z-30 font-extrabold leading-[0.9] tracking-tight text-neutral-900"
+                    style={{ fontSize: "9.5vw" }}
+                >
+                    FULL STACK
+                </h1>
+
+                {/* DEVELOPER — vertical banner, layered behind/in front of the photo */}
+                <div className="absolute right-0 top-0 z-0 h-full w-[15vh] flex items-center justify-center" aria-hidden>
+                    <div
+                        className="whitespace-nowrap rotate-90 font-extrabold leading-none tracking-tight text-neutral-900"
+                        style={{ fontSize: "14vh", textShadow: "4px 4px 14px rgba(0,0,0,0.35)" }}
+                    >
+                        DEVELOPER
+                    </div>
+                </div>
+                <div className="absolute right-0 top-0 z-20 h-full w-[15vh] flex items-center justify-center" aria-hidden>
+                    <div
+                        className="whitespace-nowrap rotate-90 font-extrabold leading-none tracking-tight text-transparent"
+                        style={{ fontSize: "14vh", WebkitTextStroke: "1.5px #000000" }}
+                    >
+                        DEVELOPER
+                    </div>
                 </div>
 
-                <h1 className="text-lg font-medium tracking-wide text-neutral-800">
-                    Mobile view coming soon
-                </h1>
-                <p className="mt-2 text-sm text-neutral-400">
-                    This site is best viewed on a larger screen for now.
+                {/* Photo */}
+                <div className="absolute left-1/2 top-[19vh] z-10 h-[54vh] w-[82vw] -translate-x-1/2">
+                    <Image
+                        src="/Liam-Grayish.png"
+                        alt="Liam Christian"
+                        fill
+                        priority
+                        className="object-contain object-top"
+                    />
+                </div>
+
+                {/* Quote */}
+                <p className="absolute left-6 top-[76vh] z-30 max-w-[62%] font-[family-name:var(--font-inter)] text-[3.6vw] italic leading-snug text-neutral-700">
+                    &ldquo;I don&apos;t have everything figured out yet, but I build, I
+                    reflect and I just keep going&rdquo;
                 </p>
+
+                {/* CTAs */}
+                <div className="absolute inset-x-6 top-[87vh] z-30 flex gap-3">
+                    <a
+                        href="#projects"
+                        className="flex-1 rounded-full bg-white px-5 py-3 text-center text-sm font-semibold text-neutral-900 shadow-sm"
+                    >
+                        View Projects
+                    </a>
+                    <a
+                        href="#contact"
+                        className="flex-1 rounded-full bg-neutral-400/40 px-5 py-3 text-center text-sm font-semibold text-white backdrop-blur-sm"
+                    >
+                        Get in Touch
+                    </a>
+                </div>
             </div>
-        </div>
+        </section>
     );
 }
 

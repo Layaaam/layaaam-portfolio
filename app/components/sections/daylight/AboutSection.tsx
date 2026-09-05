@@ -26,58 +26,13 @@ function useReveal<T extends HTMLElement>() {
   return { ref, visible };
 }
 
-function AboutMobileView() {
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const t = requestAnimationFrame(() => setVisible(true));
-    return () => cancelAnimationFrame(t);
-  }, []);
-
-  return (
-    <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-white px-8 text-center">
-      <div
-        className={`transition-all duration-1000 ease-out ${
-          visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
-        }`}
-      >
-        <div className="mb-6 flex justify-center gap-2">
-          <span className="h-2 w-2 animate-bounce rounded-full bg-neutral-300 [animation-delay:-0.3s]" />
-          <span className="h-2 w-2 animate-bounce rounded-full bg-neutral-400 [animation-delay:-0.15s]" />
-          <span className="h-2 w-2 animate-bounce rounded-full bg-neutral-500" />
-        </div>
-
-        <h1 className="text-lg font-medium tracking-wide text-neutral-800">
-          Mobile view coming soon
-        </h1>
-        <p className="mt-2 text-sm text-neutral-400">
-          This site is best viewed on a larger screen for now.
-        </p>
-      </div>
-    </div>
-  );
-}
-
 const RAISED = "bg-[var(--surface)] shadow-[10px_10px_22px_var(--shadow-dark),-10px_-10px_22px_var(--shadow-light)]";
 const RAISED_SM = "shadow-[5px_5px_10px_var(--shadow-dark),-5px_-5px_10px_var(--shadow-light)]";
 const PRESSED = "bg-[var(--surface)] shadow-[inset_7px_7px_14px_var(--shadow-dark),inset_-7px_-7px_14px_var(--shadow-light)]";
 
 export default function AboutSection() {
-  const [isMobile, setIsMobile] = useState(false);
   const { ref: headingRef, visible: headingVisible } = useReveal<HTMLDivElement>();
   const { ref: gridRef, visible: gridVisible } = useReveal<HTMLDivElement>();
-
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768);
-    check();
-
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
-
-  if (isMobile) {
-    return <AboutMobileView />;
-  }
 
   return (
     <section

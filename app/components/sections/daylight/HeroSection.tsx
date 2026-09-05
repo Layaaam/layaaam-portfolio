@@ -13,7 +13,6 @@ function HeroMobileView() {
 
     return (
         <section className="relative h-[100dvh] w-full overflow-hidden bg-[#eef0f1]">
-            {/* Background */}
             <div className="absolute inset-0 z-0">
                 <Image
                     src="/daylight-background-mobile.png"
@@ -24,7 +23,6 @@ function HeroMobileView() {
                 />
             </div>
 
-            {/* Header */}
             <div className="relative z-30 flex items-center justify-between px-6 pt-6">
                 <span className="font-[family-name:var(--font-inter)] text-3xl italic text-neutral-800">
                     L
@@ -46,7 +44,6 @@ function HeroMobileView() {
                     mounted ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
                 }`}
             >
-                {/* FULL STACK */}
                 <h1
                     className="absolute left-[29%] top-[17vh] z-30 font-extrabold leading-[0.9] tracking-tight text-neutral-900"
                     style={{ fontSize: "9.5vw" }}
@@ -54,7 +51,6 @@ function HeroMobileView() {
                     FULL STACK
                 </h1>
 
-                {/* DEVELOPER — vertical banner, layered behind/in front of the photo */}
                 <div className="absolute right-0 top-0 z-0 h-full w-[15vh] flex items-center justify-center" aria-hidden>
                     <div
                         className="whitespace-nowrap rotate-90 font-extrabold leading-none tracking-tight text-neutral-900"
@@ -72,7 +68,6 @@ function HeroMobileView() {
                     </div>
                 </div>
 
-                {/* Photo */}
                 <div className="absolute left-1/2 top-[19vh] z-10 h-[54vh] w-[82vw] -translate-x-1/2">
                     <Image
                         src="/Liam-Grayish.png"
@@ -83,13 +78,11 @@ function HeroMobileView() {
                     />
                 </div>
 
-                {/* Quote */}
                 <p className="absolute left-6 top-[76vh] z-30 max-w-[62%] font-[family-name:var(--font-inter)] text-[3.6vw] italic leading-snug text-neutral-700">
                     &ldquo;I don&apos;t have everything figured out yet, but I build, I
                     reflect and I just keep going&rdquo;
                 </p>
 
-                {/* CTAs */}
                 <div className="absolute inset-x-6 top-[87vh] z-30 flex gap-3">
                     <a
                         href="#projects"

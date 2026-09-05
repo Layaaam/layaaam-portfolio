@@ -6,6 +6,7 @@ import { useTheme } from "./context/ThemeContext";
 import Header from "./components/layouts/Header";
 import Footer from "./components/layouts/Footer";
 import SplashScreen from "./components/SplashScreen";
+import AudioPlayer from "./components/AudioPlayer";
 
 // dark theme
 import HeroSectionDark from "./components/sections/dark/HeroSection";
@@ -28,6 +29,7 @@ export default function Home() {
   return (
     <>
       <SplashScreen />
+      <AudioPlayer />
 
       {mounted && (
         <div className="overflow-x-hidden w-full">

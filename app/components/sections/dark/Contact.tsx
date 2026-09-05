@@ -102,6 +102,13 @@ export default function Contact() {
             <div className="space-y-4">
               <a
                 href="mailto:papasin.liamchristian@gmail.com"
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.open(
+                    "https://mail.google.com/mail/?view=cm&to=papasin.liamchristian@gmail.com",
+                    "_blank"
+                  );
+                }}
                 className="group flex items-center justify-between backdrop-blur-md bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl p-6 transition-all hover:scale-[1.02]"
               >
                 <div className="flex items-center gap-4">

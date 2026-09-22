@@ -23,7 +23,14 @@ interface Project {
   liveUrl?: string;
   githubUrl?: string;
   status?: "Ongoing";
+  technologies: Technology[];
   type: "web" | "mobile";
+}
+
+interface Technology {
+  name: string;
+  icon: string;
+  color: string;
 }
 
 interface Bounds {
@@ -38,6 +45,26 @@ interface Viewport {
   height: number;
 }
 
+const technology = {
+  nextjs: { name: "Next.js", icon: "nextdotjs", color: "#FFFFFF" },
+  react: { name: "React", icon: "react", color: "#61DAFB" },
+  reactNative: { name: "React Native", icon: "react", color: "#61DAFB" },
+  typescript: { name: "TypeScript", icon: "typescript", color: "#3178C6" },
+  tailwind: { name: "Tailwind CSS", icon: "tailwindcss", color: "#06B6D4" },
+  resend: { name: "Resend", icon: "resend", color: "#FFFFFF" },
+  vercel: { name: "Vercel", icon: "vercel", color: "#FFFFFF" },
+  figma: { name: "Figma (design)", icon: "figma", color: "#F24E1E" },
+  laravel: { name: "Laravel", icon: "laravel", color: "#FF2D20" },
+  shadcn: { name: "Shadcn/ui", icon: "shadcnui", color: "#FFFFFF" },
+  postgresql: { name: "PostgreSQL", icon: "postgresql", color: "#4169E1" },
+  flutter: { name: "Flutter", icon: "flutter", color: "#02569B" },
+  dart: { name: "Dart", icon: "dart", color: "#0175C2" },
+  firebase: { name: "Firebase", icon: "firebase", color: "#FFCA28" },
+  googleMaps: { name: "Google Maps API", icon: "googlemaps", color: "#4285F4" },
+  vite: { name: "Vite", icon: "vite", color: "#646CFF" },
+  supabase: { name: "Supabase", icon: "supabase", color: "#3ECF8E" },
+} satisfies Record<string, Technology>;
+
 const projects: Project[] = [
   {
     id: "megaworld-homes",
@@ -46,6 +73,15 @@ const projects: Project[] = [
       "A multi-property real estate marketing platform that helps prospective buyers explore Megaworld residential developments across Luzon, review property information, and submit inquiries through dedicated project microsites.",
     image: "/project-images/MEGAWORLDHOMES-web.png",
     liveUrl: "https://megaworldhomes.com",
+    technologies: [
+      technology.nextjs,
+      technology.react,
+      technology.typescript,
+      technology.tailwind,
+      technology.resend,
+      technology.vercel,
+      technology.figma,
+    ],
     type: "web",
   },
   {
@@ -56,6 +92,13 @@ const projects: Project[] = [
       "An integrated operations platform that centralizes human resources, attendance, payroll, document tracking, and inventory workflows for government offices. Its configurable structure allows public-sector organizations to adapt the system to their own processes.",
     image: "/project-images/MKWD-web.png",
     liveUrl: "https://hris.obxsolution.com",
+    technologies: [
+      technology.laravel,
+      technology.react,
+      technology.typescript,
+      technology.shadcn,
+      technology.postgresql,
+    ],
     type: "web",
   },
   {
@@ -65,6 +108,12 @@ const projects: Project[] = [
       "A public information platform for the Philippine Rural Development Project's Mindanao Cluster, presenting regional initiatives, subprojects, mission updates, reports, and media in one accessible website.",
     image: "/project-images/PRDP-web.png",
     liveUrl: "https://prdpmin.online",
+    technologies: [
+      technology.laravel,
+      technology.react,
+      technology.typescript,
+      technology.shadcn,
+    ],
     type: "web",
   },
   {
@@ -74,6 +123,12 @@ const projects: Project[] = [
       "A mobile and web transportation platform that connects commuters, bus conductors, and administrators through live vehicle tracking, route information, and map-based operational visibility.",
     image: "/project-images/BUKTRACK-mobile.png",
     liveUrl: "https://buktrack.web.app",
+    technologies: [
+      technology.flutter,
+      technology.dart,
+      technology.firebase,
+      technology.googleMaps,
+    ],
     type: "mobile",
   },
   {
@@ -84,6 +139,12 @@ const projects: Project[] = [
     image: "/project-images/BLAZER-web.png",
     liveUrl: "https://blazer-opal.vercel.app",
     githubUrl: "https://github.com/Layaaam/blazer",
+    technologies: [
+      technology.react,
+      technology.vite,
+      technology.typescript,
+      technology.supabase,
+    ],
     type: "web",
   },
   {
@@ -93,6 +154,7 @@ const projects: Project[] = [
       "A team and event website for CMU Palaro's Wildcats delegation, representing the College of Engineering and the College of Information Sciences and Computing.",
     image: "/project-images/WILDCATS-web.png",
     liveUrl: "https://wildcats2026.online",
+    technologies: [technology.react, technology.vercel],
     type: "web",
   },
   {
@@ -103,6 +165,7 @@ const projects: Project[] = [
     image: "/project-images/TUKI-mobile.png",
     githubUrl: "https://github.com/Layaaam/tuki",
     status: "Ongoing",
+    technologies: [technology.reactNative],
     type: "mobile",
   },
 ];
@@ -507,6 +570,31 @@ function DetailOverlay({
             <p className="mt-3 text-base leading-7 text-white/80 sm:text-lg sm:leading-8">
               {project.description}
             </p>
+          </div>
+
+          <div className="mt-6 max-w-2xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/50">
+              Technologies
+            </p>
+            <ul className="mt-3 flex flex-wrap gap-2" aria-label={`${project.title} technologies`}>
+              {project.technologies.map((item) => (
+                <li
+                  key={item.name}
+                  className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.07] px-3 py-1.5 text-xs font-medium text-white/85 backdrop-blur-sm"
+                >
+                  <span
+                    aria-hidden="true"
+                    className="block h-3.5 w-3.5 shrink-0 [mask-position:center] [mask-repeat:no-repeat] [mask-size:contain] [-webkit-mask-position:center] [-webkit-mask-repeat:no-repeat] [-webkit-mask-size:contain]"
+                    style={{
+                      backgroundColor: item.color,
+                      maskImage: `url(https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/${item.icon}.svg)`,
+                      WebkitMaskImage: `url(https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/${item.icon}.svg)`,
+                    }}
+                  />
+                  {item.name}
+                </li>
+              ))}
+            </ul>
           </div>
 
           <div className="mt-9 flex flex-wrap gap-3">

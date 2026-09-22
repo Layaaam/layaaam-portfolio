@@ -32,7 +32,7 @@ export default function Home() {
       <AudioPlayer />
 
       {mounted && (
-        <div className="overflow-x-hidden w-full">
+        <div className="overflow-x-clip w-full">
           <main className="relative min-h-screen overflow-hidden">
             <div className="fixed inset-0 z-0 transition-opacity duration-500">
               {isDaylight ? (

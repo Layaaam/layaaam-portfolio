@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import { ChevronLeft, ChevronRight, ExternalLink, Github } from "lucide-react";
+import { Fragment, useEffect, useRef, useState } from "react";
+import type { CSSProperties } from "react";
 
 interface Project {
   id: number;
   title: string;
+  shortTitle?: string;
   description: string;
   image: string;
   tags: string[];
@@ -40,6 +41,7 @@ const projects: Project[] = [
   {
     id: 3,
     title: "Metro Kidapawan Water District — Human Resource Information Management System",
+    shortTitle: "MKWD HRIMS",
     description:
       "A full-stack Human Resource Information Management System built for Metro Kidapawan Water District, led as the Payroll Processing module developer. Covers a 5-step payroll pipeline from period setup and employee loading through computation, floor check, and post-and-finalize workflows.",
     image: "/project-images/MKWD-web.png",
@@ -127,211 +129,475 @@ const projects: Project[] = [
   },
 ];
 
+const N = projects.length;
+const STEP_SVH = 85;
+const CARD_ASPECT = 1.6;
+const GAP_RATIO = 0.22; 
+const OUT_SPEED = 1; 
+const TILT_DEG = 16; 
+const PERSPECTIVE_PX = 1200;
+const SCALE_MIN = 0.9;
+const PEEK_OPACITY = 0.7; 
+const TITLE_FADE = 0.6; 
+const BG_L_MIN = 0.07;
+const BG_L_MAX = 0.32;
+const SAT_MIN = 0.06;
+const SAT_MAX = 0.3;
+const DEFAULT_BG = "#0b0e13";
+const DEFAULT_TINT = "#1b212c";
+
+type Palette = { bg: string; tint: string };
+const DEFAULT_PALETTE: Palette = { bg: DEFAULT_BG, tint: DEFAULT_TINT };
+
+function clamp(v: number, lo: number, hi: number) {
+  return Math.min(hi, Math.max(lo, v));
+}
+
+function smoothstep(t: number) {
+  const x = clamp(t, 0, 1);
+  return x * x * (3 - 2 * x);
+}
+
+function pad(n: number) {
+  return String(n).padStart(2, "0");
+}
+
+function quantize(v: number, step = 24) {
+  return Math.round(v / step) * step;
+}
+
+function rgbToHsl(r: number, g: number, b: number): [number, number, number] {
+  r /= 255;
+  g /= 255;
+  b /= 255;
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  const l = (max + min) / 2;
+  let h = 0;
+  let s = 0;
+  const d = max - min;
+  if (d !== 0) {
+    s = d / (1 - Math.abs(2 * l - 1));
+    switch (max) {
+      case r:
+        h = 60 * (((g - b) / d) % 6);
+        break;
+      case g:
+        h = 60 * ((b - r) / d + 2);
+        break;
+      default:
+        h = 60 * ((r - g) / d + 4);
+    }
+  }
+  if (h < 0) h += 360;
+  return [h, s, l];
+}
+
+function hslToHex(h: number, s: number, l: number) {
+  const c = (1 - Math.abs(2 * l - 1)) * s;
+  const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+  const m = l - c / 2;
+  let r = 0,
+    g = 0,
+    b = 0;
+  if (h < 60) [r, g, b] = [c, x, 0];
+  else if (h < 120) [r, g, b] = [x, c, 0];
+  else if (h < 180) [r, g, b] = [0, c, x];
+  else if (h < 240) [r, g, b] = [0, x, c];
+  else if (h < 300) [r, g, b] = [x, 0, c];
+  else [r, g, b] = [c, 0, x];
+  const toHex = (v: number) => Math.round((v + m) * 255).toString(16).padStart(2, "0");
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+}
+
+function hexToRgb(hex: string): [number, number, number] {
+  const v = hex.replace("#", "");
+  return [parseInt(v.slice(0, 2), 16), parseInt(v.slice(2, 4), 16), parseInt(v.slice(4, 6), 16)];
+}
+
+function lerpColor(a: string, b: string, t: number) {
+  const [ar, ag, ab] = hexToRgb(a);
+  const [br, bg, bb] = hexToRgb(b);
+  const r = Math.round(ar + (br - ar) * t);
+  const g = Math.round(ag + (bg - ag) * t);
+  const bl = Math.round(ab + (bb - ab) * t);
+  return `rgb(${r}, ${g}, ${bl})`;
+}
+
+export function cardFrame(d: number, pitch: number, reduced = false) {
+  const ad = Math.abs(d);
+  const c = Math.min(ad, 1);
+
+  const ty = (d < 0 ? d * OUT_SPEED : d) * pitch;
+  const scale = reduced ? 1 : 1 - (1 - SCALE_MIN) * c;
+  const rotate = reduced ? 0 : TILT_DEG * clamp(d, -1, 1);
+  const opacity =
+    1 - (1 - PEEK_OPACITY) * c - PEEK_OPACITY * clamp((ad - 1) / 0.6, 0, 1);
+
+  return { ty, scale, rotate, opacity: clamp(opacity, 0, 1), z: 100 - Math.round(ad * 10) };
+}
+
+export function titleFrame(d: number) {
+  return {
+    opacity: clamp(1 - Math.abs(d) / TITLE_FADE, 0, 1),
+    ty: clamp(d, -1, 1) * 24,
+  };
+}
+
+export function paletteFromStats(hue: number, domSat: number, avgLum: number): Palette {
+  const L = BG_L_MIN + (BG_L_MAX - BG_L_MIN) * Math.pow(clamp(avgLum, 0, 1), 0.85);
+  const s = clamp(domSat * 0.5, SAT_MIN, SAT_MAX);
+  const tintL = clamp(L + 0.14, 0.2, 0.46);
+  const tintS = clamp(domSat * 0.6, 0.08, 0.4);
+  return { bg: hslToHex(hue, s, L), tint: hslToHex(hue, tintS, tintL) };
+}
+
+function extractPalette(src: string): Promise<Palette> {
+  return new Promise((resolve) => {
+    const img = new window.Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => {
+      try {
+        const size = 32;
+        const canvas = document.createElement("canvas");
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return resolve(DEFAULT_PALETTE);
+        ctx.drawImage(img, 0, 0, size, size);
+        const { data } = ctx.getImageData(0, 0, size, size);
+
+        type Bucket = { w: number; n: number; r: number; g: number; b: number };
+        const buckets = new Map<string, Bucket>();
+        let lumSum = 0;
+        let px = 0;
+        let allR = 0;
+        let allG = 0;
+        let allB = 0;
+
+        for (let i = 0; i < data.length; i += 4) {
+          const r = data[i];
+          const g = data[i + 1];
+          const b = data[i + 2];
+          if (data[i + 3] < 200) continue;
+
+          lumSum += (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+          allR += r;
+          allG += g;
+          allB += b;
+          px++;
+
+          const max = Math.max(r, g, b);
+          const min = Math.min(r, g, b);
+          if (max > 235 && min > 215) continue;
+          if (max < 22) continue;
+
+          const key = `${quantize(r, 32)}-${quantize(g, 32)}-${quantize(b, 32)}`;
+          const bucket = buckets.get(key) || { w: 0, n: 0, r: 0, g: 0, b: 0 };
+          bucket.w += 1 + (4 * (max - min)) / 255;
+          bucket.n++;
+          bucket.r += r;
+          bucket.g += g;
+          bucket.b += b;
+          buckets.set(key, bucket);
+        }
+
+        if (px === 0) return resolve(DEFAULT_PALETTE);
+
+        let best: Bucket | null = null;
+        buckets.forEach((bucket) => {
+          if (!best || bucket.w > best.w) best = bucket;
+        });
+
+        const pick = best as Bucket | null;
+        const [h, s] = pick
+          ? rgbToHsl(pick.r / pick.n, pick.g / pick.n, pick.b / pick.n)
+          : rgbToHsl(allR / px, allG / px, allB / px);
+
+        resolve(paletteFromStats(h, s, lumSum / px));
+      } catch {
+        resolve(DEFAULT_PALETTE);
+      }
+    };
+    img.onerror = () => resolve(DEFAULT_PALETTE);
+    img.src = src;
+  });
+}
+
+const TITLE_SHADOW = "0 1px 3px rgba(0,0,0,0.5), 0 2px 24px rgba(0,0,0,0.55)";
+
 export default function Projects() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
+  const [palette, setPalette] = useState<Palette[]>(() => projects.map(() => DEFAULT_PALETTE));
 
-  const handleNext = () => {
-    if (isAnimating) return;
-    setIsAnimating(true);
-    setActiveIndex((prev) => (prev + 1) % projects.length);
-    setTimeout(() => setIsAnimating(false), 700);
-  };
+  const trackRef = useRef<HTMLDivElement | null>(null);
+  const stageRef = useRef<HTMLDivElement | null>(null);
+  const cardRefs = useRef<(HTMLLIElement | null)[]>([]);
+  const titleRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const titleLeftRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  const handlePrev = () => {
-    if (isAnimating) return;
-    setIsAnimating(true);
-    setActiveIndex((prev) => (prev - 1 + projects.length) % projects.length);
-    setTimeout(() => setIsAnimating(false), 700);
-  };
+  const paletteRef = useRef(palette);
+  const frameRef = useRef<(() => void) | null>(null);
 
-  const handleDotClick = (index: number) => {
-    if (isAnimating || index === activeIndex) return;
-    setIsAnimating(true);
-    setActiveIndex(index);
-    setTimeout(() => setIsAnimating(false), 700);
-  };
+  useEffect(() => {
+    let cancelled = false;
+    projects.forEach((p, i) => {
+      extractPalette(p.image).then((result) => {
+        if (cancelled) return;
+        setPalette((prev) => {
+          if (prev[i].bg === result.bg && prev[i].tint === result.tint) return prev;
+          const next = [...prev];
+          next[i] = result;
+          return next;
+        });
+      });
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
-  const getCardStyle = (index: number) => {
-    const position = (index - activeIndex + projects.length) % projects.length;
+  useEffect(() => {
+    const trackEl = trackRef.current;
+    const stageEl = stageRef.current;
+    if (!trackEl || !stageEl) return;
 
-    if (position === 0) {
-      return {
-        transform:
-          "translateX(0%) translateY(0%) rotateY(0deg) rotateX(0deg) rotateZ(0deg) scale(1)",
-        opacity: 1,
-        zIndex: 40,
-        filter: "blur(0px) brightness(1)",
-      };
-    } else if (position === 1) {
-      return {
-        transform:
-          "translateX(-5%) translateY(-35px) rotateY(8deg) rotateX(2deg) rotateZ(-3deg) scale(0.95)",
-        opacity: 0.8,
-        zIndex: 30,
-        filter: "blur(0.5px) brightness(0.85)",
-      };
-    } else if (position === 2) {
-      return {
-        transform:
-          "translateX(-10%) translateY(-70px) rotateY(12deg) rotateX(3deg) rotateZ(-5deg) scale(0.9)",
-        opacity: 0.6,
-        zIndex: 20,
-        filter: "blur(1px) brightness(0.7)",
-      };
-    } else if (position === 3) {
-      return {
-        transform:
-          "translateX(-15%) translateY(-105px) rotateY(15deg) rotateX(4deg) rotateZ(-7deg) scale(0.85)",
-        opacity: 0.4,
-        zIndex: 10,
-        filter: "blur(1.5px) brightness(0.6)",
-      };
-    } else {
-      return {
-        transform:
-          "translateX(-20%) translateY(-140px) rotateY(18deg) rotateX(5deg) rotateZ(-9deg) scale(0.8)",
-        opacity: 0,
-        zIndex: 0,
-        filter: "blur(2px) brightness(0.5)",
-      };
-    }
-  };
+    const reduceMq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let reduced = reduceMq.matches;
+    let pitch = 0;
+    let ticking = false;
+    let lastIndex = -1;
 
-  const activeProject = projects[activeIndex];
+    const measure = () => {
+      const first = cardRefs.current[0];
+      pitch = first ? first.offsetHeight * (1 + GAP_RATIO) : 0;
+    };
+
+    const applyFrame = () => {
+      ticking = false;
+
+      const rect = trackEl.getBoundingClientRect();
+      const scrollable = trackEl.offsetHeight - stageEl.clientHeight;
+      const step = scrollable / N;
+      const p = (step > 0 ? clamp(-rect.top / step, 0, N) : 0) - 1;
+      const pc = clamp(p, 0, N - 1); 
+
+      for (let i = 0; i < N; i++) {
+        const d = i - p;
+
+        const card = cardRefs.current[i];
+        if (card) {
+          const f = cardFrame(d, pitch, reduced);
+          card.style.transform =
+            `translate3d(0, ${f.ty.toFixed(2)}px, 0) ` +
+            `perspective(${PERSPECTIVE_PX}px) rotateX(${f.rotate.toFixed(2)}deg) ` +
+            `scale(${f.scale.toFixed(4)})`;
+          card.style.opacity = f.opacity.toFixed(3);
+          card.style.zIndex = String(f.z);
+          card.style.visibility = f.opacity <= 0.005 ? "hidden" : "visible";
+        }
+
+        const t = titleFrame(d);
+        for (const title of [titleRefs.current[i], titleLeftRefs.current[i]]) {
+          if (!title) continue;
+          title.style.opacity = t.opacity.toFixed(3);
+          title.style.transform = `translate3d(0, ${t.ty.toFixed(2)}px, 0)`;
+        }
+      }
+
+      const colors = paletteRef.current;
+      const lo = Math.floor(pc);
+      const hi = Math.min(N - 1, lo + 1);
+      trackEl.style.backgroundColor = lerpColor(colors[lo].bg, colors[hi].bg, smoothstep(pc - lo));
+
+      const nearest = Math.round(pc);
+      if (nearest !== lastIndex) {
+        lastIndex = nearest;
+        setActiveIndex(nearest);
+      }
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(applyFrame);
+      }
+    };
+
+    const onResize = () => {
+      measure();
+      applyFrame();
+    };
+
+    const onMotionChange = (e: MediaQueryListEvent) => {
+      reduced = e.matches;
+      applyFrame();
+    };
+
+    frameRef.current = applyFrame;
+    measure();
+    applyFrame();
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize);
+    reduceMq.addEventListener("change", onMotionChange);
+    return () => {
+      frameRef.current = null;
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
+      reduceMq.removeEventListener("change", onMotionChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    paletteRef.current = palette;
+    frameRef.current?.();
+  }, [palette]);
+
+  const active = projects[activeIndex];
 
   return (
-    <section
-      id="projects"
-      className="relative min-h-screen py-24 bg-gradient-to-b from-black/60 to-black/80"
-    >
-      <div className="container mx-auto px-6 lg:px-12 relative z-10">
-        <div className="mb-20 text-center">
-          <h2 className="text-white text-5xl lg:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-green-400">
-            Featured Projects
-          </h2>
-          <div className="h-1 w-32 bg-gradient-to-r from-green-400 to-transparent mx-auto rounded-full mb-6" />
-          <p className="text-white/70 text-xl max-w-2xl mx-auto">
-            Showcasing my projects I have learned and developed throughout my
-            school and personal journey.
-          </p>
-        </div>
+    <section id="projects" aria-label="Featured projects" className="relative isolate">
+      <div
+        ref={trackRef}
+        className="relative"
+        style={{
+          height: `calc(100svh + ${N * STEP_SVH}svh)`,
+          backgroundColor: DEFAULT_BG,
+        }}
+      >
+        <div
+          ref={stageRef}
+          className="sticky top-0 h-svh overflow-hidden [--card-w:min(86vw,520px,80svh)] md:[--card-w:min(52vw,760px,80svh)]"
+          style={
+            {
+              "--card-h": `calc(var(--card-w) / ${CARD_ASPECT})`,
+              "--row-y": "calc(50% + var(--card-h) * 0.14)",
+            } as CSSProperties
+          }
+        >
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 z-0"
+            style={{
+              background:
+                "radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.07), transparent 60%), " +
+                "radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(0,0,0,0.35))",
+            }}
+          />
 
-        <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
-          <div className="space-y-8">
-            <div>
-              <h3 className="text-white text-5xl font-bold mb-4">
-                {activeProject.title}
-              </h3>
-            </div>
+          <ol className="pointer-events-none absolute inset-0 z-10 m-0 list-none p-0">
+            {projects.map((p, i) => (
+              <li
+                key={p.id}
+                ref={(el) => {
+                  cardRefs.current[i] = el;
+                }}
+                className="absolute inset-x-0 top-1/2 mx-auto overflow-hidden rounded-[28px] border border-white/15 shadow-2xl shadow-black/50 will-change-transform"
+                style={{
+                  width: "var(--card-w)",
+                  height: `calc(var(--card-w) / ${CARD_ASPECT})`,
+                  marginTop: `calc(var(--card-w) / ${-2 * CARD_ASPECT})`,
+                  background: `linear-gradient(135deg, ${palette[i].tint}, ${palette[i].bg})`,
+                  visibility: "hidden", 
+                }}
+              >
+                {p.type === "mobile" ? (
+                  <div className="flex h-full items-center justify-center p-4 md:p-6">
+                    <img
+                      src={p.image}
+                      alt={p.title}
+                      draggable={false}
+                      className="h-full w-auto max-w-full rounded-2xl object-contain shadow-2xl shadow-black/40"
+                    />
+                  </div>
+                ) : (
+                  <img
+                    src={p.image}
+                    alt={p.title}
+                    draggable={false}
+                    className="absolute inset-0 h-full w-full object-cover object-top"
+                  />
+                )}
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/55 via-black/20 to-transparent" />
+              </li>
+            ))}
+          </ol>
 
-            <p className="text-white/70 text-lg leading-relaxed">
-              {activeProject.description}
-            </p>
-
-            <div className="flex flex-wrap gap-3">
-              {activeProject.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg text-white/80 text-sm font-medium"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-
-            {/* 
-            TODO: Find a deployable sites for some of thse projects. Aside from the usual Vercel, Github Pages and Firebase Hosting
-                  For the Mobile Application, still do some research and enhancements ont those
-            */}
-            {/* <div className="flex gap-4 pt-4">
-              {activeProject.link && (
-                <a
-                  href={activeProject.link}
-                  className="flex items-center justify-center gap-2 bg-gradient-to-r from-green-400 to-green-500 hover:from-green-500 hover:to-green-600 text-black px-6 py-4 rounded-xl font-bold transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-green-500/50"
-                >
-                  <ExternalLink size={20} />
-                  <span>View Live</span>
-                </a>
-              )}
-              {activeProject.github && (
-                <a
-                  href={activeProject.github}
-                  className="flex items-center justify-center gap-2 backdrop-blur-md bg-white/5 hover:bg-white/10 border border-white/20 text-white px-6 py-4 rounded-xl font-bold transition-all duration-300 hover:scale-105"
-                >
-                  <Github size={20} />
-                  <span>GitHub</span>
-                </a>
-              )}
-            </div> */}
+          <div className="pointer-events-none absolute inset-x-0 top-[max(5.5rem,11svh)] z-30 px-6 text-center">
+            <h2
+              className="text-3xl font-bold text-white md:text-5xl"
+              style={{ textShadow: TITLE_SHADOW }}
+            >
+              Featured Projects
+            </h2>
           </div>
 
           <div
-            className="relative h-[600px]"
-            style={{ perspective: "2000px", perspectiveOrigin: "50% 50%" }}
+            aria-hidden="true"
+            className="pointer-events-none absolute left-1/2 top-[var(--row-y)] z-20 h-12 -translate-x-1/2 -translate-y-1/2 min-[1280px]:hidden"
+            style={{ width: "var(--card-w)" }}
           >
-            <div className="relative w-full h-full flex items-center justify-end">
-              {projects.map((project, index) => (
-                <div
-                  key={project.id}
-                  className="absolute transition-all duration-700 ease-out"
-                  style={{
-                    ...getCardStyle(index),
-                    transformStyle: "preserve-3d",
-                  }}
-                >
-                  <div
-                    className={`relative backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl overflow-hidden shadow-2xl shadow-black/50 ${project.type === "mobile"
-                        ? "w-[340px] h-[600px]"
-                        : "w-[600px] h-[300px]"
-                      }`}
-                  >
-                    <div className="relative h-full overflow-hidden bg-gradient-to-br from-slate-700 to-slate-800">
-                      <img
-                        src={project.image || "/api/placeholder/800/600"}
-                        alt={project.title}
-                        className={`w-full h-full ${project.type === "mobile"
-                            ? "object-contain"
-                            : "object-contain"
-                          } opacity-90`}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-
-                      <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black to-transparent">
-                        <h4 className="text-white text-2xl font-bold">
-                          {project.title}
-                        </h4>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+            {projects.map((p, i) => (
+              <div
+                key={p.id}
+                ref={(el) => {
+                  titleRefs.current[i] = el;
+                }}
+                className="absolute inset-0 flex items-center justify-center px-4 text-center text-xl font-medium text-white md:text-3xl"
+                style={{ opacity: i === 0 ? 1 : 0, textShadow: TITLE_SHADOW }}
+              >
+                <span className="truncate">{p.shortTitle ?? p.title}</span>
+              </div>
+            ))}
           </div>
-        </div>
 
-        <div className="flex items-center justify-center gap-6">
-          <button
-            onClick={handlePrev}
-            disabled={isAnimating}
-            className="group w-14 h-14 backdrop-blur-xl bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition-all hover:scale-110 hover:border-green-500/50 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100"
-          >
-            <ChevronLeft
-              className="mx-auto text-white group-hover:text-green-400 transition-colors"
-              size={24}
-            />
-          </button>
+          <div className="absolute inset-x-0 bottom-[max(1.5rem,env(safe-area-inset-bottom))] flex items-center justify-between px-5 md:bottom-auto md:top-[var(--row-y)] md:-translate-y-1/2 md:px-10">
+              <div className="flex min-w-0 flex-col gap-1">
+                <span className="shrink-0 text-sm tabular-nums tracking-wide text-white/60">
+                  {pad(activeIndex + 1)} / {pad(N)}
+                </span>
+                <div aria-hidden="true" className="relative hidden min-[1280px]:grid">
+                  {projects.map((p, i) => (
+                    <div
+                      key={p.id}
+                      ref={(el) => {
+                        titleLeftRefs.current[i] = el;
+                      }}
+                      className={`w-max text-balance font-bold leading-[1.05] text-white ${
+                        i === activeIndex ? "col-start-1 row-start-1" : "absolute left-0 top-0"
+                      }`}
+                      style={{
+                        maxWidth: "calc((100vw - var(--card-w)) / 2 - 4.5rem)",
+                        fontSize:
+                          "clamp(1.25rem, min(2.1vw, calc(((100vw - var(--card-w)) / 2 - 4.5rem) / 9.5)), 2.5rem)",
+                        overflowWrap: "anywhere",
+                        opacity: i === 0 ? 1 : 0,
+                        textShadow: TITLE_SHADOW,
+                      }}
+                    >
+                      {(p.shortTitle ?? p.title).split(" ").map((word, w, words) => (
+                        <Fragment key={w}>
+                          <span className="whitespace-nowrap">{word}</span>
+                          {w < words.length - 1 ? " " : null}
+                        </Fragment>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <a
+                href={active.link ?? "#"}
+                aria-label={`View project: ${active.title}`}
+                className="pointer-events-auto shrink-0 rounded-full border border-white/25 bg-white/5 px-5 py-2.5 text-sm font-medium text-white backdrop-blur-md transition-colors hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-400"
+              >
+                View project
+              </a>
+            </div>
 
-          <button
-            onClick={handleNext}
-            disabled={isAnimating}
-            className="group w-14 h-14 backdrop-blur-xl bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition-all hover:scale-110 hover:border-green-500/50 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100"
-          >
-            <ChevronRight
-              className="mx-auto text-white group-hover:text-green-400 transition-colors"
-              size={24}
-            />
-          </button>
+          <p className="sr-only" aria-live="polite">
+            {active.title}
+          </p>
         </div>
       </div>
     </section>
